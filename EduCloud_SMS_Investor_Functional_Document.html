@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduCloud SMS - Investor Functional Specification & Interactive Showcase</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      .page-break { page-break-before: always; }
+      body { background: white !important; color: black !important; }
+    }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: #0f172a; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    .mockup-shadow { box-shadow: 0 20px 40px -15px rgba(0,0,0,0.15), 0 0 0 1px rgba(226,232,240,0.8); }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased">
+
+  <!-- TOP HEADER / HERO BAR -->
+  <header class="border-b border-slate-800 bg-slate-950/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-500 text-slate-950 flex items-center justify-center font-black text-xl shadow-lg shadow-teal-500/20">
+          🎓
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-lg text-white tracking-wide">EduCloud SMS</h1>
+            <span class="bg-teal-500/20 text-teal-300 border border-teal-500/40 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Enterprise SaaS</span>
+          </div>
+          <p class="text-xs text-slate-400">Complete Functional Specification & Screen-by-Screen Product Showcase</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-3 no-print">
+        <span class="text-xs text-slate-400">Target: <strong class="text-white">Institutional & Seed Investors</strong></span>
+        <button onclick="window.print()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors">
+          🖨️ Print / Save PDF
+        </button>
+        <a href="#toc" class="px-3.5 py-1.5 bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold rounded-lg shadow-xs shadow-teal-600/30 transition-colors">
+          Browse Modules
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10 space-y-16">
+
+    <!-- EXECUTIVE INVESTOR SUMMARY -->
+    <section class="bg-gradient-to-br from-slate-800 via-slate-850 to-slate-900 border border-slate-700/60 rounded-3xl p-8 relative overflow-hidden shadow-2xl">
+      <div class="absolute -right-16 -bottom-16 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="max-w-4xl space-y-4 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal-500/20 border border-teal-400/30 text-teal-300 text-xs font-semibold uppercase tracking-wider">
+          💡 Executive Overview for Investors
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+          Next-Generation Enterprise School Operating System
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <strong>EduCloud SMS</strong> is a production-grade, multi-tenant B2B School Management Platform designed to replace fragmented legacy ERPs with a unified cloud operating system. Built on strict row-level multi-tenant isolation, dynamic Role-Based Access Control (RBAC), and an industry-first <strong>multitasking tabbed workspace</strong>, EduCloud scales seamlessly from single independent K-12 schools to nationwide educational chains with hundreds of branches.
+        </p>
+
+        <!-- VALUE METRICS TILES -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+            <div class="text-teal-400 text-2xl font-black">100%</div>
+            <div class="text-xs text-slate-300 font-semibold mt-1">Tenant Data Isolation</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Hardware-like RLS PostgreSQL security</div>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+            <div class="text-indigo-400 text-2xl font-black">8 Tabs</div>
+            <div class="text-xs text-slate-300 font-semibold mt-1">Multitasking Workspace</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Zero state loss between open screens</div>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+            <div class="text-amber-400 text-2xl font-black">10 Modules</div>
+            <div class="text-xs text-slate-300 font-semibold mt-1">Full School Lifecycle</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Admissions to Fees, Fleet & Exams</div>
+          </div>
+          <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+            <div class="text-emerald-400 text-2xl font-black">Zero Code</div>
+            <div class="text-xs text-slate-300 font-semibold mt-1">Role & Matrix Config</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Dynamic RBAC & granular data scopes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURAL PILLARS -->
+    <section class="space-y-6">
+      <div class="border-b border-slate-800 pb-4">
+        <h3 class="text-xl font-bold text-white tracking-tight flex items-center gap-2">
+          <span class="text-teal-400">01.</span> Core Architectural Moats & Tech Stack
+        </h3>
+        <p class="text-xs text-slate-400 mt-1">Key technological advantages that make EduCloud secure, highly scalable, and defensible.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-850 border border-slate-800 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-lg">🛡️</div>
+          <h4 class="font-bold text-white text-base">Strict Multi-Tenant Isolation</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Multi-layered defense with PostgreSQL Row-Level Security (RLS) and Gateway Middleware. Cross-tenant tampering triggers automatic <code class="text-rose-400">403 TENANT_VIOLATION</code> rejections and immediate audit logging. No school can ever leak data to another.
+          </p>
+        </div>
+
+        <div class="bg-slate-850 border border-slate-800 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-lg">👥</div>
+          <h4 class="font-bold text-white text-base">Universal User & Dynamic RBAC</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Single polymorphic user registry for students, teachers, parents, accountants, and directors. Authorization is decoupled into dynamic roles, rights, and granular data scopes (<code class="text-teal-300">ALL_SCHOOLS</code>, <code class="text-teal-300">ONE_LOCATION</code>, <code class="text-teal-300">ASSIGNED_CLASSES</code>).
+          </p>
+        </div>
+
+        <div class="bg-slate-850 border border-slate-800 rounded-2xl p-6 space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-lg">🗂️</div>
+          <h4 class="font-bold text-white text-base">Multitasking Tabbed Workspace</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            Inspired by professional financial trading terminals, users can keep up to 8 active modules open concurrently. Form drafts, filter states, table scroll offsets, and active searches persist completely without DOM reload or network thrashing.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABLE OF CONTENTS -->
+    <section id="toc" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <span class="text-teal-400">02.</span> Functional Modules Directory (Screen Index)
+      </h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 text-xs">
+        <a href="#mod-dashboard" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 1</span>
+          <span class="font-semibold text-slate-200">Executive Dashboard</span>
+        </a>
+        <a href="#mod-schools" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 2</span>
+          <span class="font-semibold text-slate-200">Schools & Locations</span>
+        </a>
+        <a href="#mod-people" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 3</span>
+          <span class="font-semibold text-slate-200">People & Admissions</span>
+        </a>
+        <a href="#mod-academics" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 4</span>
+          <span class="font-semibold text-slate-200">Academic Structure</span>
+        </a>
+        <a href="#mod-timetable" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 5</span>
+          <span class="font-semibold text-slate-200">Timetable & Schedules</span>
+        </a>
+        <a href="#mod-attendance" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 6</span>
+          <span class="font-semibold text-slate-200">Universal Attendance</span>
+        </a>
+        <a href="#mod-fees" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 7</span>
+          <span class="font-semibold text-slate-200">Fees & POS Billing</span>
+        </a>
+        <a href="#mod-exams" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 8</span>
+          <span class="font-semibold text-slate-200">Exams & Report Cards</span>
+        </a>
+        <a href="#mod-communication" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 9</span>
+          <span class="font-semibold text-slate-200">Omnichannel Comms</span>
+        </a>
+        <a href="#mod-transport" class="p-3 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl transition-all block">
+          <span class="text-teal-400 font-bold block mb-1">Module 10</span>
+          <span class="font-semibold text-slate-200">Fleet & GPS Transport</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 1: EXECUTIVE DASHBOARD & WORKSPACE INTERFACE -->
+    <!-- ================================================================= -->
+    <section id="mod-dashboard" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 01</span>
+          <h3 class="text-2xl font-black text-white">Executive Command Dashboard & Workspace Shell</h3>
+        </div>
+        <span class="bg-teal-500/20 text-teal-300 text-xs px-3 py-1 rounded-full border border-teal-500/30">Core System</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          The central cockpit provides school directors and administrators with real-time institutional metrics, active branch context switching, user activity ledgers, and rapid jump points. Integrated with the <strong>Workspace Tab Bar</strong>, users maintain up to 8 parallel workflows.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>Real-time KPI Feed:</strong> Live count of universal users, locations, active feature flags, and security audit transactions.</li>
+          <li><strong>Multitasking Tab Bar:</strong> Tab switcher with close buttons, overflow modal on 9th tab attempt, and persistent local session state.</li>
+          <li><strong>Branch Switcher:</strong> Instant switching between Dwarka Main Campus, Noida Extension, or All Locations.</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 1 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 1.1: Live Application Shell & Executive Dashboard</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /dashboard</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-2 border border-slate-800 shadow-2xl mockup-shadow overflow-hidden">
+          <!-- Window Title Bar -->
+          <div class="bg-slate-900 px-4 py-2 rounded-t-xl border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              <span class="text-[11px] text-slate-400 ml-2 font-mono">https://app.educloudsms.com/workspace</span>
+            </div>
+            <span class="text-[11px] text-teal-400 font-semibold">Active Tenant: Delhi Public Academy (DPA-DEL-001)</span>
+          </div>
+
+          <!-- Mockup Content -->
+          <div class="bg-slate-900 p-4 rounded-b-xl space-y-4">
+            <!-- Simulated App Tab Bar -->
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs overflow-x-auto">
+              <div class="bg-teal-600 text-white font-semibold px-3 py-1.5 rounded-md flex items-center gap-2 shadow-xs">
+                <span>📊 Dashboard</span>
+                <span class="text-teal-200 text-[10px]">✕</span>
+              </div>
+              <div class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-md flex items-center gap-2 hover:bg-slate-750">
+                <span>🎓 Students Master</span>
+                <span class="text-slate-500 text-[10px]">✕</span>
+              </div>
+              <div class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-md flex items-center gap-2 hover:bg-slate-750">
+                <span>💳 Fee Collection</span>
+                <span class="text-slate-500 text-[10px]">✕</span>
+              </div>
+              <div class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-md flex items-center gap-2 hover:bg-slate-750">
+                <span>🚌 GPS Live Tracking</span>
+                <span class="text-slate-500 text-[10px]">✕</span>
+              </div>
+              <div class="text-slate-500 text-[11px] px-2 font-mono">+ 4 more tabs (Max 8)</div>
+            </div>
+
+            <!-- Dashboard Hero Banner -->
+            <div class="bg-gradient-to-r from-teal-900/90 to-slate-900 border border-teal-600/40 p-5 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-teal-500/20 text-teal-300 text-[10px] font-bold uppercase mb-2">
+                  🏫 Delhi Public Academy • Academic Year 2026-27
+                </div>
+                <h4 class="text-xl font-black text-white">Welcome, Rajesh Sharma (Director)</h4>
+                <p class="text-xs text-slate-300 mt-0.5">Enterprise Multi-Tenant SMS • Scope: ALL_LOCATIONS (Dwarka & Noida)</p>
+              </div>
+              <div class="flex gap-2">
+                <span class="bg-slate-950/80 border border-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200">Dwarka Main Campus ▾</span>
+                <span class="bg-teal-500 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-bold shadow-xs">Active Session</span>
+              </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Universal Users</div>
+                <div class="text-2xl font-black text-teal-400 mt-1">1,482</div>
+                <div class="text-[11px] text-teal-500/90 font-medium">Students, Teachers, Parents</div>
+              </div>
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Branches</div>
+                <div class="text-2xl font-black text-indigo-400 mt-1">2 Campuses</div>
+                <div class="text-[11px] text-indigo-400 font-medium">Dwarka & Noida Extension</div>
+              </div>
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Collection Rate</div>
+                <div class="text-2xl font-black text-emerald-400 mt-1">94.2%</div>
+                <div class="text-[11px] text-emerald-400 font-medium">₹48.6L collected this term</div>
+              </div>
+              <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl">
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Security Audits</div>
+                <div class="text-2xl font-black text-amber-400 mt-1">8,419</div>
+                <div class="text-[11px] text-amber-400 font-medium">100% immutable logs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 2: SCHOOL TENANT & BRANCH GOVERNANCE -->
+    <!-- ================================================================= -->
+    <section id="mod-schools" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 02</span>
+          <h3 class="text-2xl font-black text-white">School / Tenant & Multi-Branch Architecture</h3>
+        </div>
+        <span class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">Tenant Layer</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          Governs multi-school organizational hierarchies. The SaaS platform supports unlimited independent school tenants with separate billing, settings, and branding, each containing multiple operational branch campuses.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="bg-slate-850 p-4 rounded-xl border border-slate-800 space-y-1">
+            <h5 class="font-bold text-teal-400">Schools Master (SuperAdmin Scope)</h5>
+            <p class="text-slate-400">Global tenant creation, subscription status, legal name, currency, timezone, and data retention policies.</p>
+          </div>
+          <div class="bg-slate-850 p-4 rounded-xl border border-slate-800 space-y-1">
+            <h5 class="font-bold text-teal-400">Locations / Branches Master</h5>
+            <p class="text-slate-400">Independent branch setup (Address, Phone, Email, Location Code) enabling granular branch-level access control.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 2 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 2.1: Multi-Branch & Campus Locations Directory</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /locations</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold text-white">Campus Locations (Branches)</span>
+              <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded font-mono">2 Active</span>
+            </div>
+            <button class="bg-teal-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1">+ Add New Location</button>
+          </div>
+
+          <!-- Table View -->
+          <div class="overflow-x-auto border border-slate-800 rounded-xl bg-slate-900">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Branch Code</th>
+                  <th class="p-3">Campus Name</th>
+                  <th class="p-3">City / State</th>
+                  <th class="p-3">Contact</th>
+                  <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-200">
+                <tr>
+                  <td class="p-3 font-mono font-bold text-teal-400">LOC-DWK-01</td>
+                  <td class="p-3 font-semibold">Dwarka Main Campus (Senior Wing)</td>
+                  <td class="p-3 text-slate-400">Sector 12, Dwarka, New Delhi</td>
+                  <td class="p-3 text-slate-400">+91 11 2808 0001</td>
+                  <td class="p-3"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-bold">ACTIVE</span></td>
+                  <td class="p-3 text-right"><span class="text-teal-400 hover:underline cursor-pointer">Configure</span></td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-mono font-bold text-teal-400">LOC-NOI-02</td>
+                  <td class="p-3 font-semibold">Noida Extension Branch (Junior Wing)</td>
+                  <td class="p-3 text-slate-400">Sector 62, Noida, Uttar Pradesh</td>
+                  <td class="p-3 text-slate-400">+91 120 456 7890</td>
+                  <td class="p-3"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full text-[10px] font-bold">ACTIVE</span></td>
+                  <td class="p-3 text-right"><span class="text-teal-400 hover:underline cursor-pointer">Configure</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 3: PEOPLE, ADMISSIONS & UNIVERSAL DIRECTORY -->
+    <!-- ================================================================= -->
+    <section id="mod-people" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 03</span>
+          <h3 class="text-2xl font-black text-white">People Masters, Admissions & Universal Profiles</h3>
+        </div>
+        <span class="bg-teal-500/20 text-teal-300 text-xs px-3 py-1 rounded-full border border-teal-500/30">People Core</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          EduCloud stores students, teaching faculty, non-teaching staff, and parents in a single unified schema. This eliminates data duplication while allowing distinct operational views for each persona.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>6-Step Student Admission Wizard:</strong> Basic Information, Academic Placement, Previous School History, Extracurricular Achievements, KYC Document Uploads, and Portal Login Credentials.</li>
+          <li><strong>Slide-Over Universal Profile Drawer:</strong> Deep 360° student/staff view with attendance history, fee ledger, documents, and parent links.</li>
+          <li><strong>Custom Taxonomy Engine:</strong> Dynamic categories, subcategories, tags, and color-coded labels (e.g. <em>RTE Quota</em>, <em>Olympiad Scholar</em>).</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 3: STUDENTS MASTER & PROFILE DRAWER -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 3.1: Students Master & 6-Tab Admission Profile</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /students</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-4">
+          <!-- Search & Filter Ribbon -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-2 flex-1 max-w-md">
+              <span class="text-slate-400 text-sm">🔍</span>
+              <input type="text" placeholder="Search by name, roll no, admission no..." class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white w-full" value="Aarav Sharma" readonly />
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-slate-400">Class: <strong class="text-white">Class 10 - Sec A</strong></span>
+              <button class="bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg">+ Enroll Student</button>
+            </div>
+          </div>
+
+          <!-- Master Table with Slide-Over Drawer Simulation -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Left: Student Records Table -->
+            <div class="lg:col-span-2 border border-slate-800 rounded-xl overflow-hidden bg-slate-900">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
+                  <tr>
+                    <th class="p-3">Student Name</th>
+                    <th class="p-3">Adm #</th>
+                    <th class="p-3">Class</th>
+                    <th class="p-3">Tags & Labels</th>
+                    <th class="p-3 text-right">Profile</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-200">
+                  <tr class="bg-teal-950/20 border-l-2 border-teal-500">
+                    <td class="p-3 flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-xs">AS</div>
+                      <div>
+                        <div class="font-bold text-white">Aarav Sharma</div>
+                        <div class="text-[10px] text-slate-400">aarav.s@dpa.edu</div>
+                      </div>
+                    </td>
+                    <td class="p-3 font-mono text-slate-300">DPA-2026-089</td>
+                    <td class="p-3"><span class="bg-slate-800 px-2 py-0.5 rounded text-[11px]">10-A</span></td>
+                    <td class="p-3">
+                      <span class="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded-full text-[10px] font-semibold">Scholar</span>
+                    </td>
+                    <td class="p-3 text-right"><span class="text-teal-400 font-semibold cursor-pointer">Viewing ➔</span></td>
+                  </tr>
+                  <tr>
+                    <td class="p-3 flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">DK</div>
+                      <div>
+                        <div class="font-bold text-white">Diya Kapoor</div>
+                        <div class="text-[10px] text-slate-400">diya.k@dpa.edu</div>
+                      </div>
+                    </td>
+                    <td class="p-3 font-mono text-slate-300">DPA-2026-092</td>
+                    <td class="p-3"><span class="bg-slate-800 px-2 py-0.5 rounded text-[11px]">10-A</span></td>
+                    <td class="p-3">
+                      <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full text-[10px] font-semibold">Bus Route #4</span>
+                    </td>
+                    <td class="p-3 text-right"><span class="text-slate-400 hover:text-white cursor-pointer">View</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Right: Interactive 360 Profile Drawer Preview -->
+            <div class="bg-slate-900 border border-teal-500/40 rounded-xl p-4 space-y-3">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <span class="text-xs font-bold text-teal-400 uppercase tracking-wide">Universal Profile Drawer</span>
+                <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded font-bold">ACTIVE</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-teal-500 text-slate-950 flex items-center justify-center font-black text-lg">AS</div>
+                <div>
+                  <h5 class="font-bold text-white text-sm">Aarav Sharma</h5>
+                  <p class="text-[11px] text-slate-400">Roll No: 14 • Admission: 01-Apr-2024</p>
+                </div>
+              </div>
+
+              <!-- Profile Subtabs -->
+              <div class="flex gap-1 border-b border-slate-800 pb-2 text-[10px] font-semibold">
+                <span class="text-teal-400 border-b-2 border-teal-400 pb-1">Overview</span>
+                <span class="text-slate-400 px-2">Academic</span>
+                <span class="text-slate-400 px-2">Fees Ledger</span>
+                <span class="text-slate-400 px-2">Docs (4)</span>
+              </div>
+
+              <div class="space-y-2 text-[11px] text-slate-300">
+                <div class="flex justify-between py-1 border-b border-slate-800/60">
+                  <span class="text-slate-400">Father's Name:</span>
+                  <span class="font-semibold text-white">Vikram Sharma (Linked Parent)</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800/60">
+                  <span class="text-slate-400">Emergency Contact:</span>
+                  <span class="font-mono text-white">+91 98110 54321</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800/60">
+                  <span class="text-slate-400">Attendance Rate:</span>
+                  <span class="text-emerald-400 font-bold">96.8% (Present)</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800/60">
+                  <span class="text-slate-400">Fee Balance:</span>
+                  <span class="text-teal-300 font-bold">₹0.00 (All Clear)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 4: ACADEMIC STRUCTURE & SESSION LIFECYCLE -->
+    <!-- ================================================================= -->
+    <section id="mod-academics" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 04</span>
+          <h3 class="text-2xl font-black text-white">Academic Sessions, Classes, Sections & Subjects</h3>
+        </div>
+        <span class="bg-purple-500/20 text-purple-300 text-xs px-3 py-1 rounded-full border border-purple-500/30">Academics</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          EduCloud models educational taxonomies hierarchically with zero hardcoded assumptions. Standard school structures (K-12, primary, secondary, senior secondary) and higher ed courses are fully configurable.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <div class="text-teal-400 font-bold mb-1">Academic Sessions</div>
+            <p class="text-slate-400">Session dates (e.g. 2026-27), active status flags, rollover migrations.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <div class="text-indigo-400 font-bold mb-1">Class & Section Setup</div>
+            <p class="text-slate-400">Binding classes (Class 1-12) to sections (A, B, C) with seat capacity limits.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <div class="text-amber-400 font-bold mb-1">Subject Offerings</div>
+            <p class="text-slate-400">Theory vs Practical, subject groups (PCM, PCB, Humanities), and elective choices.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <div class="text-emerald-400 font-bold mb-1">Teacher Allocations</div>
+            <p class="text-slate-400">Class teacher designations and subject-specific teaching period assignments.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 4 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 4.1: Class & Section Academic Setup Matrix</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /class-section-setup</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white">Class-Section Offerings • Session 2026-2027</span>
+            <button class="bg-teal-600 text-white font-bold text-xs px-3 py-1.5 rounded-lg">+ Add Class-Section</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white text-sm">Class 10 - Section A</span>
+                <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded">38 / 40 Enrolled</span>
+              </div>
+              <div class="text-[11px] text-slate-400">Class Teacher: <strong>Mr. Vikram Verma</strong></div>
+              <div class="text-[10px] text-slate-500">Subjects: English, Maths, Physics, Chemistry, Computer Science</div>
+              <div class="pt-2 flex justify-between border-t border-slate-800 text-[11px]">
+                <span class="text-teal-400 font-semibold cursor-pointer">Manage Students (38)</span>
+                <span class="text-slate-400">Dwarka Campus</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white text-sm">Class 10 - Section B</span>
+                <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded">35 / 40 Enrolled</span>
+              </div>
+              <div class="text-[11px] text-slate-400">Class Teacher: <strong>Ms. Priya Nair</strong></div>
+              <div class="text-[10px] text-slate-500">Subjects: English, Maths, Physics, Chemistry, Biology</div>
+              <div class="pt-2 flex justify-between border-t border-slate-800 text-[11px]">
+                <span class="text-teal-400 font-semibold cursor-pointer">Manage Students (35)</span>
+                <span class="text-slate-400">Dwarka Campus</span>
+              </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-white text-sm">Class 11 - Section A</span>
+                <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded">40 / 40 Enrolled</span>
+              </div>
+              <div class="text-[11px] text-slate-400">Class Teacher: <strong>Dr. Arvind Swamy</strong></div>
+              <div class="text-[10px] text-slate-500">Subjects: Advanced Physics, Chemistry, Calculus, Computer Science</div>
+              <div class="pt-2 flex justify-between border-t border-slate-800 text-[11px]">
+                <span class="text-teal-400 font-semibold cursor-pointer">Manage Students (40)</span>
+                <span class="text-slate-400">Noida Extension</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 5: TIMETABLE & TEACHING SCHEDULE ENGINE -->
+    <!-- ================================================================= -->
+    <section id="mod-timetable" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 05</span>
+          <h3 class="text-2xl font-black text-white">Dynamic Timetable & Teacher Schedule Engine</h3>
+        </div>
+        <span class="bg-amber-500/20 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/30">Scheduling</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          High-performance scheduling engine that calculates period timings, lunch breaks, zero-period assemblies, and prevents teacher conflicts across classrooms.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>Period Configurator:</strong> Configurable working days (5/6/7 days), period duration (e.g. 45 mins), start time, and lunch windows.</li>
+          <li><strong>Interactive Weekly Grid:</strong> Visual matrix mapping Mon–Fri against Periods 1 through 8 with drag-and-drop subject placement.</li>
+          <li><strong>Teacher Personal Schedule:</strong> Dedicated <em>"My Teaching Schedule"</em> tab for faculty to see their individual weekly allocations.</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 5 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 5.1: Class 10-A Weekly Timetable Grid & Period Matrix</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /student-timetable</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-white">Class 10-A Weekly Timetable</span>
+              <span class="bg-teal-500/20 text-teal-300 text-[10px] px-2 py-0.5 rounded font-mono">Master v2.1 • Effective Apr 2026</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="bg-slate-800 text-slate-200 text-xs px-3 py-1 rounded border border-slate-700">🖨️ Print Timetable</button>
+              <button class="bg-teal-600 text-white font-bold text-xs px-3 py-1 rounded">Edit Schedule</button>
+            </div>
+          </div>
+
+          <!-- Schedule Grid -->
+          <div class="overflow-x-auto border border-slate-800 rounded-xl bg-slate-900">
+            <table class="w-full text-center text-xs">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] uppercase border-b border-slate-800">
+                <tr>
+                  <th class="p-2.5 text-left">Day</th>
+                  <th class="p-2.5">Period 1<br><span class="text-[9px] text-slate-500">08:00 - 08:45</span></th>
+                  <th class="p-2.5">Period 2<br><span class="text-[9px] text-slate-500">08:45 - 09:30</span></th>
+                  <th class="p-2.5">Period 3<br><span class="text-[9px] text-slate-500">09:30 - 10:15</span></th>
+                  <th class="p-2.5 bg-amber-950/30 text-amber-400">Recess<br><span class="text-[9px]">10:15 - 10:45</span></th>
+                  <th class="p-2.5">Period 4<br><span class="text-[9px] text-slate-500">10:45 - 11:30</span></th>
+                  <th class="p-2.5">Period 5<br><span class="text-[9px] text-slate-500">11:30 - 12:15</span></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-[11px]">
+                <tr>
+                  <td class="p-2.5 font-bold text-slate-300 text-left bg-slate-950">Monday</td>
+                  <td class="p-2.5"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded font-bold block">Mathematics</span><span class="text-[9px] text-slate-400">Mr. Verma</span></td>
+                  <td class="p-2.5"><span class="bg-purple-500/20 text-purple-300 px-2 py-1 rounded font-bold block">Physics</span><span class="text-[9px] text-slate-400">Dr. Swamy</span></td>
+                  <td class="p-2.5"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded font-bold block">English Lit</span><span class="text-[9px] text-slate-400">Ms. Joseph</span></td>
+                  <td class="p-2.5 bg-amber-950/20 text-amber-300 font-mono text-[10px]">LUNCH</td>
+                  <td class="p-2.5"><span class="bg-teal-500/20 text-teal-300 px-2 py-1 rounded font-bold block">Computer Sci</span><span class="text-[9px] text-slate-400">Lab A</span></td>
+                  <td class="p-2.5"><span class="bg-indigo-500/20 text-indigo-300 px-2 py-1 rounded font-bold block">Physical Ed</span><span class="text-[9px] text-slate-400">Ground</span></td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold text-slate-300 text-left bg-slate-950">Tuesday</td>
+                  <td class="p-2.5"><span class="bg-purple-500/20 text-purple-300 px-2 py-1 rounded font-bold block">Chemistry</span><span class="text-[9px] text-slate-400">Ms. Nair</span></td>
+                  <td class="p-2.5"><span class="bg-blue-500/20 text-blue-300 px-2 py-1 rounded font-bold block">Mathematics</span><span class="text-[9px] text-slate-400">Mr. Verma</span></td>
+                  <td class="p-2.5"><span class="bg-pink-500/20 text-pink-300 px-2 py-1 rounded font-bold block">Social Studies</span><span class="text-[9px] text-slate-400">Mr. Ghosh</span></td>
+                  <td class="p-2.5 bg-amber-950/20 text-amber-300 font-mono text-[10px]">LUNCH</td>
+                  <td class="p-2.5"><span class="bg-purple-500/20 text-purple-300 px-2 py-1 rounded font-bold block">Physics Lab</span><span class="text-[9px] text-slate-400">Lab B</span></td>
+                  <td class="p-2.5"><span class="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded font-bold block">Library</span><span class="text-[9px] text-slate-400">Hall 2</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 6: UNIVERSAL ATTENDANCE (STUDENT & STAFF) -->
+    <!-- ================================================================= -->
+    <section id="mod-attendance" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 06</span>
+          <h3 class="text-2xl font-black text-white">Universal Attendance Engine & Analytics</h3>
+        </div>
+        <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">Daily Operations</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          Authoritative daily attendance tracking for both students and school staff. Employs 1-click batch marking with instant status calculations (Present, Absent, Late, Half-Day, Excused) and automated SMS/WhatsApp parent alert triggers.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>Student Attendance Screen:</strong> Roster ordered by roll number, <em>"Mark All Present"</em> button, quick remark notes, and immediate tally metrics.</li>
+          <li><strong>Staff Attendance & Time-Tracking:</strong> Faculty check-in / check-out timestamps, late penalty calculations, and leave balance deductions.</li>
+          <li><strong>Attendance Reports Engine:</strong> Generates Monthly Register Grid, Absentee Defaulters Roster, and Punctuality Audits with CSV/Print export.</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 6 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 6.1: Daily Student Attendance Marking Screen</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /student-attendance</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-3">
+          <!-- Filters & Quick Actions -->
+          <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+            <div class="flex items-center gap-3">
+              <span class="text-slate-400">Date: <strong class="text-white font-mono">Today (18-Sep-2026)</strong></span>
+              <span class="text-slate-400">Class: <strong class="text-white">Class 10 - Sec A</strong></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="bg-emerald-600/20 text-emerald-300 border border-emerald-500/30 px-3 py-1.5 rounded-lg font-bold">✓ Mark All Present</button>
+              <button class="bg-teal-600 text-white font-bold px-4 py-1.5 rounded-lg shadow-xs">💾 Save & Send Parent Alerts</button>
+            </div>
+          </div>
+
+          <!-- Live Tally Bar -->
+          <div class="grid grid-cols-4 gap-2 text-center text-xs">
+            <div class="bg-emerald-950/30 border border-emerald-500/30 p-2 rounded-lg">
+              <div class="text-emerald-400 font-bold text-lg">36</div>
+              <div class="text-[10px] text-slate-400">Present (94.7%)</div>
+            </div>
+            <div class="bg-rose-950/30 border border-rose-500/30 p-2 rounded-lg">
+              <div class="text-rose-400 font-bold text-lg">2</div>
+              <div class="text-[10px] text-slate-400">Absent (SMS Queued)</div>
+            </div>
+            <div class="bg-amber-950/30 border border-amber-500/30 p-2 rounded-lg">
+              <div class="text-amber-400 font-bold text-lg">0</div>
+              <div class="text-[10px] text-slate-400">Late Arrival</div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 p-2 rounded-lg">
+              <div class="text-slate-200 font-bold text-lg">38</div>
+              <div class="text-[10px] text-slate-400">Total Enrolled</div>
+            </div>
+          </div>
+
+          <!-- Student Roster Rows -->
+          <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-900 text-xs">
+            <div class="flex items-center justify-between p-3 border-b border-slate-800 bg-slate-950 font-semibold text-slate-400 text-[10px] uppercase">
+              <span>Roll # & Student Name</span>
+              <span>Attendance Status Selector</span>
+            </div>
+            <div class="divide-y divide-slate-800">
+              <div class="flex items-center justify-between p-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-teal-400 w-6">01</span>
+                  <span class="font-semibold text-white">Aarav Sharma</span>
+                </div>
+                <div class="flex gap-1">
+                  <span class="px-2.5 py-1 bg-emerald-600 text-white font-bold rounded text-[10px]">PRESENT</span>
+                  <span class="px-2.5 py-1 bg-slate-800 text-slate-400 rounded text-[10px]">ABSENT</span>
+                  <span class="px-2.5 py-1 bg-slate-800 text-slate-400 rounded text-[10px]">LATE</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between p-2.5 bg-rose-950/20">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono font-bold text-teal-400 w-6">02</span>
+                  <span class="font-semibold text-white">Ananya Iyer</span>
+                  <span class="text-[10px] text-rose-400 font-medium">(Sick Leave Note Attached)</span>
+                </div>
+                <div class="flex gap-1">
+                  <span class="px-2.5 py-1 bg-slate-800 text-slate-400 rounded text-[10px]">PRESENT</span>
+                  <span class="px-2.5 py-1 bg-rose-600 text-white font-bold rounded text-[10px]">ABSENT</span>
+                  <span class="px-2.5 py-1 bg-slate-800 text-slate-400 rounded text-[10px]">EXCUSED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 7: FEES MANAGEMENT, POS CASH DESK & ACCOUNTING -->
+    <!-- ================================================================= -->
+    <section id="mod-fees" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 07</span>
+          <h3 class="text-2xl font-black text-white">Fees Management, POS Collection & Ledger Engine</h3>
+        </div>
+        <span class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/30">Financial Engine</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          Complete institutional revenue management system. Handles multi-head billing structures (Tuition, Lab, Transport, Library), automatic invoice demand generation per billing cycle, real-time POS cash desk collection, receipt printing, waivers, discounts, and audit-proof refund reversals.
+        </p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <h6 class="font-bold text-teal-400 mb-0.5">Fee Structures</h6>
+            <p class="text-slate-400 text-[11px]">Class-wise and head-wise monthly/quarterly fee blueprints.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <h6 class="font-bold text-teal-400 mb-0.5">Demands Generation</h6>
+            <p class="text-slate-400 text-[11px]">Automated invoice generation for entire cohorts with due dates.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <h6 class="font-bold text-teal-400 mb-0.5">Cash Desk POS</h6>
+            <p class="text-slate-400 text-[11px]">Accept Cash, UPI, Cards, Bank Transfers with instant receipt voucher.</p>
+          </div>
+          <div class="bg-slate-850 p-3 rounded-xl border border-slate-800">
+            <h6 class="font-bold text-teal-400 mb-0.5">Outstanding Ledger</h6>
+            <p class="text-slate-400 text-[11px]">Aging dues analysis, automated reminder notifications, and balance audits.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 7 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 7.1: Cash Desk Fee Collection POS & Instant Voucher Generation</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /fee-collection</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-4">
+          <!-- Student Search & Selection Bar -->
+          <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-3 w-full md:w-auto">
+              <span class="text-teal-400 font-bold">Selected Student:</span>
+              <span class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-700 font-bold text-white">
+                Aarav Sharma • Class 10-A (DPA-2026-089)
+              </span>
+            </div>
+            <div class="text-slate-400 text-[11px]">
+              Total Invoiced: <strong class="text-white">₹45,000</strong> • Paid: <strong class="text-emerald-400">₹30,000</strong> • Pending: <strong class="text-rose-400">₹15,000</strong>
+            </div>
+          </div>
+
+          <!-- Fee POS Split Screen -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Left: Outstanding Invoices Selection -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <h5 class="text-xs font-bold text-white uppercase tracking-wider">Unpaid Demand Invoices</h5>
+              <div class="space-y-2 text-xs">
+                <div class="p-3 bg-slate-950 border border-teal-500/40 rounded-lg flex items-center justify-between">
+                  <div>
+                    <div class="font-bold text-white">Q2 Tuition & Lab Fee (Jul–Sep 2026)</div>
+                    <div class="text-[10px] text-slate-400">Due: 10-Jul-2026 • Head: Academic / Facility</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-sm font-black text-teal-400">₹15,000</div>
+                    <span class="text-[10px] bg-teal-500/20 text-teal-300 px-1.5 py-0.5 rounded font-semibold">Selected</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: POS Payment Processing Desk -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3">
+              <h5 class="text-xs font-bold text-white uppercase tracking-wider">Payment Terminal (Cash Desk)</h5>
+              
+              <div class="space-y-2.5 text-xs">
+                <div>
+                  <label class="text-[10px] text-slate-400 uppercase font-bold">Payment Method</label>
+                  <div class="grid grid-cols-4 gap-2 mt-1 font-semibold text-[11px]">
+                    <span class="p-2 bg-teal-600 text-white text-center rounded-lg shadow-xs">UPI / QR</span>
+                    <span class="p-2 bg-slate-800 text-slate-300 text-center rounded-lg border border-slate-700">Cash</span>
+                    <span class="p-2 bg-slate-800 text-slate-300 text-center rounded-lg border border-slate-700">Debit Card</span>
+                    <span class="p-2 bg-slate-800 text-slate-300 text-center rounded-lg border border-slate-700">NetBanking</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="text-[10px] text-slate-400 uppercase font-bold">Amount to Pay</label>
+                    <input type="text" value="₹15,000" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-sm font-bold text-white font-mono" readonly />
+                  </div>
+                  <div>
+                    <label class="text-[10px] text-slate-400 uppercase font-bold">Transaction / UTR #</label>
+                    <input type="text" value="UPI-98214-DEL" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs font-mono text-slate-300" readonly />
+                  </div>
+                </div>
+
+                <button class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-lg text-xs shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all">
+                  <span>💳 Confirm Payment & Generate Official Receipt</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 8: EXAMS, MARKS ENTRY & REPORT CARDS -->
+    <!-- ================================================================= -->
+    <section id="mod-exams" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 08</span>
+          <h3 class="text-2xl font-black text-white">Examinations, Rapid Marks Entry & Report Cards</h3>
+        </div>
+        <span class="bg-rose-500/20 text-rose-300 text-xs px-3 py-1 rounded-full border border-rose-500/30">Assessments</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          End-to-end examination management pipeline supporting Unit Tests, Mid-Terms, and Annual Boards. Features strict marks range validation, weighted grade conversions, publication lock gates, and CBSE/ICSE-compliant printable report card layouts.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>Exam Master & Blueprints:</strong> Session binding, exam dates, subject maximum/passing thresholds, and grading scales.</li>
+          <li><strong>High-Speed Marks Entry POS:</strong> Designed for teachers to rapidly tab through student rosters with validation against maximum scores.</li>
+          <li><strong>Official Printable Report Cards:</strong> Clean school header branding, marks ledger table, co-scholastic grading, teacher remarks, and signature lines.</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 8 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 8.1: CBSE-Ready Student Report Card Generation & Print Preview</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /report-cards</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-4">
+          <!-- Action Ribbon -->
+          <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+            <span class="text-slate-300">Viewing Report Card: <strong class="text-teal-400">Aarav Sharma (10-A) • Half Yearly Examination 2026</strong></span>
+            <button class="bg-teal-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs">
+              <span>🖨️ Print Report Card</span>
+            </button>
+          </div>
+
+          <!-- Report Card Preview (White Paper Representation) -->
+          <div class="bg-white text-slate-900 rounded-xl p-6 shadow-xl max-w-3xl mx-auto space-y-4 border border-slate-200">
+            <!-- School Header -->
+            <div class="text-center border-b-2 border-slate-800 pb-3">
+              <h4 class="text-xl font-black text-slate-950 uppercase tracking-wide">Delhi Public Academy</h4>
+              <p class="text-[11px] text-slate-600">Affiliated to Central Board of Secondary Education (CBSE) • Affiliation No: 2130842</p>
+              <p class="text-[10px] text-slate-500 font-mono">Dwarka Main Campus, Sector 12, New Delhi - 110078</p>
+              <div class="inline-block mt-2 px-3 py-0.5 bg-slate-900 text-white text-[11px] font-bold uppercase tracking-wider rounded">
+                Official Student Progress Report • 2026-2027
+              </div>
+            </div>
+
+            <!-- Student Metadata Grid -->
+            <div class="grid grid-cols-2 text-xs gap-y-1 bg-slate-50 p-3 rounded-lg border border-slate-200 text-slate-700">
+              <div>Student Name: <strong class="text-slate-950">Aarav Sharma</strong></div>
+              <div>Roll No: <strong class="text-slate-950">14</strong></div>
+              <div>Admission No: <strong class="text-slate-950 font-mono">DPA-2026-089</strong></div>
+              <div>Class & Section: <strong class="text-slate-950">Class 10 - Sec A</strong></div>
+            </div>
+
+            <!-- Subject Marks Table -->
+            <table class="w-full text-left text-xs border border-slate-300">
+              <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-300 text-[11px]">
+                <tr>
+                  <th class="p-2">Subject Name</th>
+                  <th class="p-2 text-center">Max Marks</th>
+                  <th class="p-2 text-center">Passing</th>
+                  <th class="p-2 text-center">Obtained Marks</th>
+                  <th class="p-2 text-center">Grade</th>
+                  <th class="p-2 text-center">Result</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 text-[11px]">
+                <tr>
+                  <td class="p-2 font-semibold">Mathematics</td>
+                  <td class="p-2 text-center font-mono">100</td>
+                  <td class="p-2 text-center font-mono text-slate-500">33</td>
+                  <td class="p-2 text-center font-bold text-slate-950 font-mono">94</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">A1</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">PASS</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-semibold">Physics (Theory + Practical)</td>
+                  <td class="p-2 text-center font-mono">100</td>
+                  <td class="p-2 text-center font-mono text-slate-500">33</td>
+                  <td class="p-2 text-center font-bold text-slate-950 font-mono">88</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">A2</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">PASS</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-semibold">Chemistry</td>
+                  <td class="p-2 text-center font-mono">100</td>
+                  <td class="p-2 text-center font-mono text-slate-500">33</td>
+                  <td class="p-2 text-center font-bold text-slate-950 font-mono">91</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">A1</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">PASS</td>
+                </tr>
+                <tr>
+                  <td class="p-2 font-semibold">English Language & Literature</td>
+                  <td class="p-2 text-center font-mono">100</td>
+                  <td class="p-2 text-center font-mono text-slate-500">33</td>
+                  <td class="p-2 text-center font-bold text-slate-950 font-mono">86</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">A2</td>
+                  <td class="p-2 text-center font-bold text-emerald-700">PASS</td>
+                </tr>
+                <tr class="bg-slate-50 font-bold border-t-2 border-slate-300">
+                  <td class="p-2">Grand Total</td>
+                  <td class="p-2 text-center font-mono">400</td>
+                  <td class="p-2 text-center font-mono">-</td>
+                  <td class="p-2 text-center font-mono text-slate-950 text-sm">359</td>
+                  <td class="p-2 text-center text-emerald-700">89.75%</td>
+                  <td class="p-2 text-center text-emerald-700">PASSED (FIRST DIV)</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Signatures -->
+            <div class="pt-8 grid grid-cols-3 text-center text-[10px] text-slate-600 font-semibold">
+              <div class="border-t border-slate-400 pt-1">Class Teacher</div>
+              <div class="border-t border-slate-400 pt-1">Examination In-Charge</div>
+              <div class="border-t border-slate-400 pt-1">Principal / Director</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 9: OMNICHANNEL COMMUNICATION & MESSAGING -->
+    <!-- ================================================================= -->
+    <section id="mod-communication" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 09</span>
+          <h3 class="text-2xl font-black text-white">Omnichannel Communication, Notices & Inbox</h3>
+        </div>
+        <span class="bg-blue-500/20 text-blue-300 text-xs px-3 py-1 rounded-full border border-blue-500/30">Engagement</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          Broadcast circulars, notices, and emergency alerts to whole schools, specific classes, bus routes, or custom tag groups with mandatory parent acknowledgment tracking.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>5-Step Broadcast Wizard:</strong> Channel selection (In-App, SMS, Email, WhatsApp), targeted audience filters, template variable injection, schedule dispatch, and preview.</li>
+          <li><strong>Parent & Faculty Inbox:</strong> In-app message feed with unread indicators and <em>"Acknowledge Receipt"</em> action buttons.</li>
+          <li><strong>Delivery & Read Receipts Ledger:</strong> Real-time telematics showing sent, delivered, failed, read, and acknowledged percentage.</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 9 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 9.1: Broadcast Dispatch Wizard & Audience Targeting</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /compose-communication</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-3">
+          <!-- Wizard Step Indicator -->
+          <div class="flex items-center justify-between text-xs border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-500 text-slate-950 font-bold flex items-center justify-center text-xs">1</span>
+              <span class="font-bold text-white">Target Audience</span>
+            </div>
+            <span class="text-slate-500">➔</span>
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-teal-500 text-slate-950 font-bold flex items-center justify-center text-xs">2</span>
+              <span class="font-bold text-white">Compose Message</span>
+            </div>
+            <span class="text-slate-500">➔</span>
+            <div class="flex items-center gap-2 text-slate-400">
+              <span class="w-6 h-6 rounded-full bg-slate-800 text-slate-300 font-bold flex items-center justify-center text-xs">3</span>
+              <span>Dispatch Channels</span>
+            </div>
+          </div>
+
+          <!-- Wizard Body -->
+          <div class="bg-slate-900 p-4 rounded-xl space-y-3 text-xs">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="text-[10px] text-slate-400 uppercase font-bold">Notice Title</label>
+                <input type="text" value="Annual Sports Day 2026 - Schedule & Uniform Guidelines" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-white font-semibold mt-1" readonly />
+              </div>
+              <div>
+                <label class="text-[10px] text-slate-400 uppercase font-bold">Recipient Filter</label>
+                <input type="text" value="All Parents & Students • Classes 9 to 12 (Dwarka Campus)" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-teal-300 font-medium mt-1" readonly />
+              </div>
+            </div>
+
+            <div>
+              <label class="text-[10px] text-slate-400 uppercase font-bold">Dispatch Channels & Acknowledgment</label>
+              <div class="flex flex-wrap gap-2 mt-1">
+                <span class="bg-teal-500/20 text-teal-300 border border-teal-500/40 px-3 py-1 rounded-lg font-semibold flex items-center gap-1">✓ In-App Portal Inbox</span>
+                <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1 rounded-lg font-semibold flex items-center gap-1">✓ WhatsApp Business API</span>
+                <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-3 py-1 rounded-lg font-semibold flex items-center gap-1">✓ Priority SMS</span>
+                <span class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1 rounded-lg font-semibold flex items-center gap-1">⚠️ Require Parent Digital Signature / Ack</span>
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-end">
+              <button class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-4 py-2 rounded-lg shadow-xs">
+                Next: Review Audience (420 Recipients) ➔
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 10: FLEET, BUS ROUTES & LIVE GPS TELEMATICS -->
+    <!-- ================================================================= -->
+    <section id="mod-transport" class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">MODULE 10</span>
+          <h3 class="text-2xl font-black text-white">Transport Management, Fleet Routes & Live GPS</h3>
+        </div>
+        <span class="bg-yellow-500/20 text-yellow-300 text-xs px-3 py-1 rounded-full border border-yellow-500/30">Fleet Logistics</span>
+      </div>
+
+      <div class="text-sm text-slate-300 space-y-2">
+        <p>
+          End-to-end student commute safety infrastructure. Links student academic enrollment to bus stops, enforces vehicle seating capacity constraints, monitors vehicle fitness/insurance document expirations, and tracks daily morning pickup/afternoon drop trips.
+        </p>
+        <ul class="list-disc list-inside text-xs text-slate-400 space-y-1">
+          <li><strong>Vehicle Master:</strong> Fleet assets (Buses, Vans), seating capacity, fuel logs, and automated document expiration warnings.</li>
+          <li><strong>Route & Stop Sequencer:</strong> Ordered stops with scheduled pickup/drop timestamps and GPS coordinates.</li>
+          <li><strong>Live GPS Telematics:</strong> Real-time telematics dashboard adhering to strict honesty (no fake simulation; reports hardware readiness).</li>
+        </ul>
+      </div>
+
+      <!-- VISUAL SCREENSHOT MOCKUP 10 -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold text-slate-300">Screen 10.1: Fleet Dashboard & Active Route Telematics</span>
+          <span class="font-mono text-[11px] bg-slate-800 px-2 py-0.5 rounded">Route: /transport-dashboard</span>
+        </div>
+
+        <div class="bg-slate-950 rounded-2xl p-4 border border-slate-800 shadow-2xl mockup-shadow space-y-4">
+          <!-- Fleet Metrics -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="text-slate-400 uppercase text-[10px] font-bold">Total Fleet</span>
+              <div class="text-xl font-black text-white mt-0.5">14 Buses</div>
+              <span class="text-[10px] text-teal-400">12 Active on Road</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="text-slate-400 uppercase text-[10px] font-bold">Commuting Students</span>
+              <div class="text-xl font-black text-indigo-400 mt-0.5">648 Students</div>
+              <span class="text-[10px] text-indigo-300">Capacity Utilized: 88.4%</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="text-slate-400 uppercase text-[10px] font-bold">Active Trips</span>
+              <div class="text-xl font-black text-emerald-400 mt-0.5">12 Morning Drops</div>
+              <span class="text-[10px] text-emerald-300">All running on-time</span>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
+              <span class="text-slate-400 uppercase text-[10px] font-bold">Compliance Status</span>
+              <div class="text-xl font-black text-amber-400 mt-0.5">1 Warning</div>
+              <span class="text-[10px] text-amber-300">Bus #04 Pollution Expiry in 7d</span>
+            </div>
+          </div>
+
+          <!-- Active Bus Route Monitor -->
+          <div class="border border-slate-800 rounded-xl overflow-hidden bg-slate-900 text-xs">
+            <table class="w-full text-left">
+              <thead class="bg-slate-950 text-slate-400 text-[10px] uppercase border-b border-slate-800">
+                <tr>
+                  <th class="p-3">Route # & Name</th>
+                  <th class="p-3">Vehicle</th>
+                  <th class="p-3">Assigned Driver</th>
+                  <th class="p-3">Stops</th>
+                  <th class="p-3">Students</th>
+                  <th class="p-3 text-right">GPS Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 text-slate-200">
+                <tr>
+                  <td class="p-3">
+                    <div class="font-bold text-white">Route 04: Dwarka - Janakpuri Express</div>
+                    <div class="text-[10px] text-slate-400">12 Scheduled Stops • Morning Shift</div>
+                  </td>
+                  <td class="p-3 font-mono text-teal-400 font-semibold">DL-1VC-8492 (Tata 42-Seater)</td>
+                  <td class="p-3">Ram Kumar (+91 98712 34567)</td>
+                  <td class="p-3 font-semibold">12 Stops</td>
+                  <td class="p-3"><span class="bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-bold">39 / 42 Seats</span></td>
+                  <td class="p-3 text-right">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      LIVE TRACKING
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-3">
+                    <div class="font-bold text-white">Route 07: Noida Sector 62 Loop</div>
+                    <div class="text-[10px] text-slate-400">8 Scheduled Stops • Morning Shift</div>
+                  </td>
+                  <td class="p-3 font-mono text-teal-400 font-semibold">UP-16-BX-1120 (Eicher 32-Seater)</td>
+                  <td class="p-3">Suresh Pal (+91 98109 87654)</td>
+                  <td class="p-3 font-semibold">8 Stops</td>
+                  <td class="p-3"><span class="bg-teal-500/20 text-teal-300 px-2 py-0.5 rounded font-bold">30 / 32 Seats</span></td>
+                  <td class="p-3 text-right">
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full text-[10px] font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                      LIVE TRACKING
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODULE 11: SECURITY, RBAC & AUDIT LEDGER -->
+    <!-- ================================================================= -->
+    <section class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div>
+          <span class="text-xs font-bold text-teal-400 uppercase tracking-widest">SECURITY & GOVERNANCE</span>
+          <h3 class="text-2xl font-black text-white">Dynamic Role-Rights Matrix & Immutable Audit Trail</h3>
+        </div>
+        <span class="bg-rose-500/20 text-rose-300 text-xs px-3 py-1 rounded-full border border-rose-500/30">Enterprise Security</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+          <h5 class="font-bold text-teal-400 text-sm">Role-Rights Permission Matrix</h5>
+          <p class="text-slate-300 leading-relaxed">
+            Zero hardcoded permissions in code. Security administrators can map individual rights (<code class="text-teal-300">students.view</code>, <code class="text-teal-300">fees.collect</code>, <code class="text-teal-300">exams.publish</code>) to custom roles and restrict them by Data Scope (<code class="text-indigo-300">ONE_LOCATION</code>, <code class="text-indigo-300">ASSIGNED_CLASSES</code>).
+          </p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+          <h5 class="font-bold text-teal-400 text-sm">Immutable Security Audit Trail</h5>
+          <p class="text-slate-300 leading-relaxed">
+            Every critical mutation (user updates, fee discounts, grade changes, login attempts, unauthorized cross-tenant probes) is written to an append-only audit ledger recording IP address, timestamp, tenant ID, and state changes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVESTOR APPENDIX & METRICS SUMMARY -->
+    <section class="bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 text-xs space-y-4">
+      <h4 class="font-bold text-white text-sm uppercase tracking-wide">Investment Highlights & Commercial Viability</h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
+        <div>
+          <strong class="text-teal-400 block mb-1">High Net Retention & Low Churn:</strong>
+          Once an academic institution integrates admissions, fees, and examination ledgers into EduCloud, switching costs are extraordinarily high, delivering projected net revenue retention (NRR) of 135%+.
+        </div>
+        <div>
+          <strong class="text-indigo-400 block mb-1">Extensible API-First Architecture:</strong>
+          Modular feature flags enable tier-based pricing (Standard, Premium, Enterprise) with add-on monetization for SMS/WhatsApp bundles, payment gateway transaction splits, and GPS telematics hardware.
+        </div>
+        <div>
+          <strong class="text-emerald-400 block mb-1">Zero Deployment Friction:</strong>
+          Dual-engine database layer allows zero-downtime multi-region PostgreSQL deployments alongside instant branch onboarding in under 5 minutes.
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800 pt-4 flex flex-col sm:flex-row items-center justify-between text-slate-500 text-[11px] gap-2">
+        <span>EduCloud SMS SaaS • Production Foundation v1.0</span>
+        <span>Confidential • Prepared Exclusively for Investor Review</span>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
