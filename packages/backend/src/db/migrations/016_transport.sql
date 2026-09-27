@@ -200,30 +200,37 @@ ALTER TABLE student_transport_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transport_trips ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vehicle_location_history ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_vehicles_isolation ON vehicles;
 CREATE POLICY p_vehicles_isolation ON vehicles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_driver_assignments_isolation ON vehicle_driver_assignments;
 CREATE POLICY p_driver_assignments_isolation ON vehicle_driver_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_transport_routes_isolation ON transport_routes;
 CREATE POLICY p_transport_routes_isolation ON transport_routes FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_route_stops_isolation ON transport_route_stops;
 CREATE POLICY p_route_stops_isolation ON transport_route_stops FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_std_transport_isolation ON student_transport_assignments;
 CREATE POLICY p_std_transport_isolation ON student_transport_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_transport_trips_isolation ON transport_trips;
 CREATE POLICY p_transport_trips_isolation ON transport_trips FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_location_history_isolation ON vehicle_location_history;
 CREATE POLICY p_location_history_isolation ON vehicle_location_history FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());

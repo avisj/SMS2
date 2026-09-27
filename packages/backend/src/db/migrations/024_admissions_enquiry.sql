@@ -117,6 +117,7 @@ ALTER TABLE admission_applications ENABLE ROW LEVEL SECURITY;
 
 -- 6. TENANT ISOLATION POLICIES (Preserves strict multi-tenant boundary)
 DROP POLICY IF EXISTS p_admission_sources_tenant_isolation ON admission_sources;
+DROP POLICY IF EXISTS p_admission_sources_tenant_isolation ON admission_sources;
 CREATE POLICY p_admission_sources_tenant_isolation ON admission_sources
     FOR ALL
     USING (
@@ -130,6 +131,7 @@ CREATE POLICY p_admission_sources_tenant_isolation ON admission_sources
         OR school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID
     );
 
+DROP POLICY IF EXISTS p_admission_enquiries_tenant_isolation ON admission_enquiries;
 DROP POLICY IF EXISTS p_admission_enquiries_tenant_isolation ON admission_enquiries;
 CREATE POLICY p_admission_enquiries_tenant_isolation ON admission_enquiries
     FOR ALL
@@ -145,6 +147,7 @@ CREATE POLICY p_admission_enquiries_tenant_isolation ON admission_enquiries
     );
 
 DROP POLICY IF EXISTS p_admission_followups_tenant_isolation ON admission_followups;
+DROP POLICY IF EXISTS p_admission_followups_tenant_isolation ON admission_followups;
 CREATE POLICY p_admission_followups_tenant_isolation ON admission_followups
     FOR ALL
     USING (
@@ -158,6 +161,7 @@ CREATE POLICY p_admission_followups_tenant_isolation ON admission_followups
         OR school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID
     );
 
+DROP POLICY IF EXISTS p_admission_applications_tenant_isolation ON admission_applications;
 DROP POLICY IF EXISTS p_admission_applications_tenant_isolation ON admission_applications;
 CREATE POLICY p_admission_applications_tenant_isolation ON admission_applications
     FOR ALL

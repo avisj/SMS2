@@ -115,6 +115,7 @@ CREATE INDEX IF NOT EXISTS idx_driver_profiles_status ON transport_driver_profil
 -- Row Level Security on transport_driver_profiles
 ALTER TABLE transport_driver_profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_driver_profiles_isolation ON transport_driver_profiles;
 CREATE POLICY p_driver_profiles_isolation ON transport_driver_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());

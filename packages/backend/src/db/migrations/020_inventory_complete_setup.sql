@@ -399,70 +399,84 @@ ALTER TABLE inventory_adjustment_details ENABLE ROW LEVEL SECURITY;
 
 -- Idempotent RLS: Drop policy if exists before recreating
 DROP POLICY IF EXISTS p_inv_cat_isolation ON inventory_categories;
+DROP POLICY IF EXISTS p_inv_cat_isolation ON inventory_categories;
 CREATE POLICY p_inv_cat_isolation ON inventory_categories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_subcat_isolation ON inventory_subcategories;
 DROP POLICY IF EXISTS p_inv_subcat_isolation ON inventory_subcategories;
 CREATE POLICY p_inv_subcat_isolation ON inventory_subcategories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_uom_isolation ON inventory_uoms;
+DROP POLICY IF EXISTS p_inv_uom_isolation ON inventory_uoms;
 CREATE POLICY p_inv_uom_isolation ON inventory_uoms FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_brand_isolation ON inventory_brands;
 DROP POLICY IF EXISTS p_inv_brand_isolation ON inventory_brands;
 CREATE POLICY p_inv_brand_isolation ON inventory_brands FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_vendor_isolation ON inventory_vendors;
+DROP POLICY IF EXISTS p_inv_vendor_isolation ON inventory_vendors;
 CREATE POLICY p_inv_vendor_isolation ON inventory_vendors FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_products_isolation ON products;
 DROP POLICY IF EXISTS p_products_isolation ON products;
 CREATE POLICY p_products_isolation ON products FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_skus_isolation ON skus;
+DROP POLICY IF EXISTS p_skus_isolation ON skus;
 CREATE POLICY p_skus_isolation ON skus FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_stock_isolation ON inventory_stock;
 DROP POLICY IF EXISTS p_inv_stock_isolation ON inventory_stock;
 CREATE POLICY p_inv_stock_isolation ON inventory_stock FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_ledger_isolation ON inventory_stock_ledger;
+DROP POLICY IF EXISTS p_inv_ledger_isolation ON inventory_stock_ledger;
 CREATE POLICY p_inv_ledger_isolation ON inventory_stock_ledger FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_po_isolation ON purchase_orders;
 DROP POLICY IF EXISTS p_po_isolation ON purchase_orders;
 CREATE POLICY p_po_isolation ON purchase_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_so_isolation ON sales_orders;
+DROP POLICY IF EXISTS p_so_isolation ON sales_orders;
 CREATE POLICY p_so_isolation ON sales_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_stock_in_isolation ON inventory_stock_in;
 DROP POLICY IF EXISTS p_stock_in_isolation ON inventory_stock_in;
 CREATE POLICY p_stock_in_isolation ON inventory_stock_in FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_stock_out_isolation ON inventory_stock_out;
+DROP POLICY IF EXISTS p_stock_out_isolation ON inventory_stock_out;
 CREATE POLICY p_stock_out_isolation ON inventory_stock_out FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_adjustments_isolation ON inventory_adjustments;
 DROP POLICY IF EXISTS p_adjustments_isolation ON inventory_adjustments;
 CREATE POLICY p_adjustments_isolation ON inventory_adjustments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())

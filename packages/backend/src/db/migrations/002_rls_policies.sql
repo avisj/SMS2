@@ -41,6 +41,7 @@ $$ LANGUAGE plpgsql STABLE;
 -- Super Admins can see all schools; School users only see their own school
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_schools_tenant_isolation ON schools;
+DROP POLICY IF EXISTS p_schools_tenant_isolation ON schools;
 CREATE POLICY p_schools_tenant_isolation ON schools
     FOR ALL
     USING (
@@ -55,6 +56,7 @@ CREATE POLICY p_schools_tenant_isolation ON schools
 -- ------------------------------------------------------------------------
 -- Locations Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_locations_tenant_isolation ON locations;
 DROP POLICY IF EXISTS p_locations_tenant_isolation ON locations;
 CREATE POLICY p_locations_tenant_isolation ON locations
     FOR ALL
@@ -71,6 +73,7 @@ CREATE POLICY p_locations_tenant_isolation ON locations
 -- Universal Users Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_users_tenant_isolation ON users;
+DROP POLICY IF EXISTS p_users_tenant_isolation ON users;
 CREATE POLICY p_users_tenant_isolation ON users
     FOR ALL
     USING (
@@ -85,6 +88,7 @@ CREATE POLICY p_users_tenant_isolation ON users
 -- ------------------------------------------------------------------------
 -- User Types Table RLS (System defaults with NULL school_id visible to all)
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_user_types_tenant_isolation ON user_types;
 DROP POLICY IF EXISTS p_user_types_tenant_isolation ON user_types;
 CREATE POLICY p_user_types_tenant_isolation ON user_types
     FOR ALL
@@ -102,6 +106,7 @@ CREATE POLICY p_user_types_tenant_isolation ON user_types
 -- Roles Table RLS (System template roles with NULL school_id visible to all)
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_roles_tenant_isolation ON roles;
+DROP POLICY IF EXISTS p_roles_tenant_isolation ON roles;
 CREATE POLICY p_roles_tenant_isolation ON roles
     FOR ALL
     USING (
@@ -117,6 +122,7 @@ CREATE POLICY p_roles_tenant_isolation ON roles
 -- ------------------------------------------------------------------------
 -- Role Permissions Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_role_permissions_tenant_isolation ON role_permissions;
 DROP POLICY IF EXISTS p_role_permissions_tenant_isolation ON role_permissions;
 CREATE POLICY p_role_permissions_tenant_isolation ON role_permissions
     FOR ALL
@@ -134,6 +140,7 @@ CREATE POLICY p_role_permissions_tenant_isolation ON role_permissions
 -- User Roles Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_user_roles_tenant_isolation ON user_roles;
+DROP POLICY IF EXISTS p_user_roles_tenant_isolation ON user_roles;
 CREATE POLICY p_user_roles_tenant_isolation ON user_roles
     FOR ALL
     USING (
@@ -148,6 +155,7 @@ CREATE POLICY p_user_roles_tenant_isolation ON user_roles
 -- ------------------------------------------------------------------------
 -- User Location Access Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_user_location_tenant_isolation ON user_location_access;
 DROP POLICY IF EXISTS p_user_location_tenant_isolation ON user_location_access;
 CREATE POLICY p_user_location_tenant_isolation ON user_location_access
     FOR ALL
@@ -164,6 +172,7 @@ CREATE POLICY p_user_location_tenant_isolation ON user_location_access
 -- School Features & Settings Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_school_features_tenant_isolation ON school_features;
+DROP POLICY IF EXISTS p_school_features_tenant_isolation ON school_features;
 CREATE POLICY p_school_features_tenant_isolation ON school_features
     FOR ALL
     USING (
@@ -175,6 +184,7 @@ CREATE POLICY p_school_features_tenant_isolation ON school_features
         OR school_id = current_school_id()
     );
 
+DROP POLICY IF EXISTS p_school_settings_tenant_isolation ON school_settings;
 DROP POLICY IF EXISTS p_school_settings_tenant_isolation ON school_settings;
 CREATE POLICY p_school_settings_tenant_isolation ON school_settings
     FOR ALL
@@ -190,6 +200,7 @@ CREATE POLICY p_school_settings_tenant_isolation ON school_settings
 -- ------------------------------------------------------------------------
 -- Audit Logs RLS (Append and Read-only for tenant)
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_audit_logs_tenant_isolation ON audit_logs;
 DROP POLICY IF EXISTS p_audit_logs_tenant_isolation ON audit_logs;
 CREATE POLICY p_audit_logs_tenant_isolation ON audit_logs
     FOR ALL

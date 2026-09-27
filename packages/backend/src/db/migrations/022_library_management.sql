@@ -268,38 +268,50 @@ ALTER TABLE library_fines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE library_lost_damaged ENABLE ROW LEVEL SECURITY;
 
 -- Tenant Isolation Policies
+DROP POLICY IF EXISTS library_settings_tenant_policy ON library_settings;
 CREATE POLICY library_settings_tenant_policy ON library_settings FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_categories_tenant_policy ON library_categories;
 CREATE POLICY library_categories_tenant_policy ON library_categories FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_authors_tenant_policy ON library_authors;
 CREATE POLICY library_authors_tenant_policy ON library_authors FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_publishers_tenant_policy ON library_publishers;
 CREATE POLICY library_publishers_tenant_policy ON library_publishers FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_books_tenant_policy ON library_books;
 CREATE POLICY library_books_tenant_policy ON library_books FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_book_authors_tenant_policy ON library_book_authors;
 CREATE POLICY library_book_authors_tenant_policy ON library_book_authors FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_book_copies_tenant_policy ON library_book_copies;
 CREATE POLICY library_book_copies_tenant_policy ON library_book_copies FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_members_tenant_policy ON library_members;
 CREATE POLICY library_members_tenant_policy ON library_members FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_issues_tenant_policy ON library_issues;
 CREATE POLICY library_issues_tenant_policy ON library_issues FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_reservations_tenant_policy ON library_reservations;
 CREATE POLICY library_reservations_tenant_policy ON library_reservations FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_fines_tenant_policy ON library_fines;
 CREATE POLICY library_fines_tenant_policy ON library_fines FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_lost_damaged_tenant_policy ON library_lost_damaged;
 CREATE POLICY library_lost_damaged_tenant_policy ON library_lost_damaged FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);

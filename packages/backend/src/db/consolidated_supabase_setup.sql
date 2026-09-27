@@ -290,6 +290,8 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE INDEX IF NOT EXISTS idx_audit_logs_school ON audit_logs(school_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_user ON audit_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
+
+
 -- ========================================================================
 -- 002_rls_policies.sql
 -- Multi-Tenant School Management System SaaS - PostgreSQL Row-Level Security
@@ -333,6 +335,7 @@ $$ LANGUAGE plpgsql STABLE;
 -- Super Admins can see all schools; School users only see their own school
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_schools_tenant_isolation ON schools;
+DROP POLICY IF EXISTS p_schools_tenant_isolation ON schools;
 CREATE POLICY p_schools_tenant_isolation ON schools
     FOR ALL
     USING (
@@ -347,6 +350,7 @@ CREATE POLICY p_schools_tenant_isolation ON schools
 -- ------------------------------------------------------------------------
 -- Locations Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_locations_tenant_isolation ON locations;
 DROP POLICY IF EXISTS p_locations_tenant_isolation ON locations;
 CREATE POLICY p_locations_tenant_isolation ON locations
     FOR ALL
@@ -363,6 +367,7 @@ CREATE POLICY p_locations_tenant_isolation ON locations
 -- Universal Users Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_users_tenant_isolation ON users;
+DROP POLICY IF EXISTS p_users_tenant_isolation ON users;
 CREATE POLICY p_users_tenant_isolation ON users
     FOR ALL
     USING (
@@ -377,6 +382,7 @@ CREATE POLICY p_users_tenant_isolation ON users
 -- ------------------------------------------------------------------------
 -- User Types Table RLS (System defaults with NULL school_id visible to all)
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_user_types_tenant_isolation ON user_types;
 DROP POLICY IF EXISTS p_user_types_tenant_isolation ON user_types;
 CREATE POLICY p_user_types_tenant_isolation ON user_types
     FOR ALL
@@ -394,6 +400,7 @@ CREATE POLICY p_user_types_tenant_isolation ON user_types
 -- Roles Table RLS (System template roles with NULL school_id visible to all)
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_roles_tenant_isolation ON roles;
+DROP POLICY IF EXISTS p_roles_tenant_isolation ON roles;
 CREATE POLICY p_roles_tenant_isolation ON roles
     FOR ALL
     USING (
@@ -409,6 +416,7 @@ CREATE POLICY p_roles_tenant_isolation ON roles
 -- ------------------------------------------------------------------------
 -- Role Permissions Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_role_permissions_tenant_isolation ON role_permissions;
 DROP POLICY IF EXISTS p_role_permissions_tenant_isolation ON role_permissions;
 CREATE POLICY p_role_permissions_tenant_isolation ON role_permissions
     FOR ALL
@@ -426,6 +434,7 @@ CREATE POLICY p_role_permissions_tenant_isolation ON role_permissions
 -- User Roles Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_user_roles_tenant_isolation ON user_roles;
+DROP POLICY IF EXISTS p_user_roles_tenant_isolation ON user_roles;
 CREATE POLICY p_user_roles_tenant_isolation ON user_roles
     FOR ALL
     USING (
@@ -440,6 +449,7 @@ CREATE POLICY p_user_roles_tenant_isolation ON user_roles
 -- ------------------------------------------------------------------------
 -- User Location Access Table RLS
 -- ------------------------------------------------------------------------
+DROP POLICY IF EXISTS p_user_location_tenant_isolation ON user_location_access;
 DROP POLICY IF EXISTS p_user_location_tenant_isolation ON user_location_access;
 CREATE POLICY p_user_location_tenant_isolation ON user_location_access
     FOR ALL
@@ -456,6 +466,7 @@ CREATE POLICY p_user_location_tenant_isolation ON user_location_access
 -- School Features & Settings Table RLS
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_school_features_tenant_isolation ON school_features;
+DROP POLICY IF EXISTS p_school_features_tenant_isolation ON school_features;
 CREATE POLICY p_school_features_tenant_isolation ON school_features
     FOR ALL
     USING (
@@ -467,6 +478,7 @@ CREATE POLICY p_school_features_tenant_isolation ON school_features
         OR school_id = current_school_id()
     );
 
+DROP POLICY IF EXISTS p_school_settings_tenant_isolation ON school_settings;
 DROP POLICY IF EXISTS p_school_settings_tenant_isolation ON school_settings;
 CREATE POLICY p_school_settings_tenant_isolation ON school_settings
     FOR ALL
@@ -483,6 +495,7 @@ CREATE POLICY p_school_settings_tenant_isolation ON school_settings
 -- Audit Logs RLS (Append and Read-only for tenant)
 -- ------------------------------------------------------------------------
 DROP POLICY IF EXISTS p_audit_logs_tenant_isolation ON audit_logs;
+DROP POLICY IF EXISTS p_audit_logs_tenant_isolation ON audit_logs;
 CREATE POLICY p_audit_logs_tenant_isolation ON audit_logs
     FOR ALL
     USING (
@@ -493,6 +506,8 @@ CREATE POLICY p_audit_logs_tenant_isolation ON audit_logs
         is_platform_super_admin() = TRUE 
         OR school_id = current_school_id()
     );
+
+
 -- ========================================================================
 -- 003_system_seed.sql
 -- Multi-Tenant School Management System SaaS - Seed Data & System Templates
@@ -632,6 +647,8 @@ INSERT INTO platform_settings (key, value, data_type, description, is_public) VA
     ('maintenance_mode', 'false', 'BOOLEAN', 'Toggle global maintenance mode window', TRUE),
     ('max_branches_per_school', '10', 'NUMBER', 'Default maximum branch allowance per tenant', FALSE)
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+
+
 -- ========================================================================
 -- 004_demo_seed.sql
 -- Multi-Tenant Demo Seed: 2 Schools, Multi-Branches, Roles, and Scoped Users
@@ -870,6 +887,8 @@ INSERT INTO school_settings (school_id, setting_key, setting_value, category, da
 ('a0000000-0000-0000-0000-000000000001', 'date_format', 'DD/MM/YYYY', 'GENERAL', 'STRING'),
 ('a0000000-0000-0000-0000-000000000001', 'attendance_cutoff_time', '08:30', 'OPERATIONS', 'STRING')
 ON CONFLICT (school_id, setting_key) DO NOTHING;
+
+
 -- ========================================================================
 -- 005_people_masters.sql
 -- People / User Management Masters & Extensions
@@ -1063,37 +1082,47 @@ ALTER TABLE student_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE staff_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE parent_student_relationships ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_designations_isolation ON designations;
 CREATE POLICY p_designations_isolation ON designations FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_categories_isolation ON user_categories;
 CREATE POLICY p_user_categories_isolation ON user_categories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_subcategories_isolation ON user_subcategories;
 CREATE POLICY p_user_subcategories_isolation ON user_subcategories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_tags_isolation ON user_tags;
 CREATE POLICY p_user_tags_isolation ON user_tags FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_labels_isolation ON user_labels;
 CREATE POLICY p_user_labels_isolation ON user_labels FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_student_profiles_isolation ON student_profiles;
 CREATE POLICY p_student_profiles_isolation ON student_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_staff_profiles_isolation ON staff_profiles;
 CREATE POLICY p_staff_profiles_isolation ON staff_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_parent_student_isolation ON parent_student_relationships;
 CREATE POLICY p_parent_student_isolation ON parent_student_relationships FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
+
+
 -- ========================================================================
 -- 006_academic_structure.sql
 -- Academic Structure & Academic Assignments
@@ -1309,45 +1338,57 @@ ALTER TABLE academic_class_subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_academic_enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE teacher_subject_assignments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_academic_sessions_isolation ON academic_sessions;
 CREATE POLICY p_academic_sessions_isolation ON academic_sessions FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_classes_isolation ON classes;
 CREATE POLICY p_classes_isolation ON classes FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_sections_isolation ON sections;
 CREATE POLICY p_sections_isolation ON sections FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_academic_class_sections_isolation ON academic_class_sections;
 CREATE POLICY p_academic_class_sections_isolation ON academic_class_sections FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subjects_isolation ON subjects;
 CREATE POLICY p_subjects_isolation ON subjects FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subject_groups_isolation ON subject_groups;
 CREATE POLICY p_subject_groups_isolation ON subject_groups FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subject_group_items_isolation ON subject_group_items;
 CREATE POLICY p_subject_group_items_isolation ON subject_group_items FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_academic_class_subjects_isolation ON academic_class_subjects;
 CREATE POLICY p_academic_class_subjects_isolation ON academic_class_subjects FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_student_academic_enrollments_isolation ON student_academic_enrollments;
 CREATE POLICY p_student_academic_enrollments_isolation ON student_academic_enrollments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_teacher_subject_assignments_isolation ON teacher_subject_assignments;
 CREATE POLICY p_teacher_subject_assignments_isolation ON teacher_subject_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
+
+
 -- ========================================================================
 -- 007_refactor_roles_rights_and_display_order.sql
 -- Architecture & Navigation Correction:
@@ -1403,6 +1444,8 @@ SELECT
     is_system,
     created_at
 FROM permissions;
+
+
 -- ========================================================================
 -- 008_auth_school_id_and_credentials.sql
 -- School ID Architecture, Dedicated User Credentials & Authentication Security
@@ -1442,6 +1485,8 @@ CREATE INDEX IF NOT EXISTS idx_user_credentials_location_id ON user_credentials(
 ALTER TABLE users DROP CONSTRAINT IF EXISTS users_username_key;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_school_username ON users(school_id, username) WHERE deleted_at IS NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_null_school_username ON users(username) WHERE school_id IS NULL AND deleted_at IS NULL;
+
+
 -- ========================================================================
 -- 009_student_staff_extended_records.sql
 -- Normalized Child Entities for Student History, Staff Qualifications,
@@ -1568,6 +1613,8 @@ CREATE TABLE IF NOT EXISTS user_documents (
 
 CREATE INDEX IF NOT EXISTS idx_user_documents_user ON user_documents(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_documents_school ON user_documents(school_id);
+
+
 -- ========================================================================
 -- 010_student_timetable.sql
 -- Authoritative Student Timetable Module
@@ -1640,6 +1687,8 @@ CREATE INDEX IF NOT EXISTS idx_timetable_details_master ON timetable_details(tim
 CREATE INDEX IF NOT EXISTS idx_timetable_details_class ON timetable_details(school_id, class_id, section_id);
 CREATE INDEX IF NOT EXISTS idx_timetable_details_teacher ON timetable_details(school_id, teacher_id);
 CREATE INDEX IF NOT EXISTS idx_timetable_details_slot ON timetable_details(timetable_master_id, day_of_week, period_no);
+
+
 -- ========================================================================
 -- 011_universal_attendance.sql
 -- Universal Attendance Module
@@ -1736,6 +1785,8 @@ CREATE TABLE IF NOT EXISTS attendance_audit_log (
 
 CREATE INDEX IF NOT EXISTS idx_attendance_audit_att ON attendance_audit_log(attendance_id);
 CREATE INDEX IF NOT EXISTS idx_attendance_audit_school ON attendance_audit_log(school_id);
+
+
 -- ========================================================================
 -- 012_student_enrollment_partial_unique.sql
 -- Relax unique constraint on student_academic_enrollments to partial unique index
@@ -1751,6 +1802,8 @@ ALTER TABLE student_academic_enrollments
 CREATE UNIQUE INDEX IF NOT EXISTS uq_student_active_session 
     ON student_academic_enrollments (school_id, student_user_id, academic_session_id) 
     WHERE enrollment_status = 'ENROLLED' AND deleted_at IS NULL;
+
+
 -- ========================================================================
 -- 013_fees_management.sql
 -- Fees Management Module Schema
@@ -1947,6 +2000,8 @@ CREATE TABLE IF NOT EXISTS fee_refunds (
 CREATE INDEX IF NOT EXISTS idx_fee_refunds_school ON fee_refunds(school_id);
 CREATE INDEX IF NOT EXISTS idx_fee_refunds_payment ON fee_refunds(payment_id);
 CREATE INDEX IF NOT EXISTS idx_fee_refunds_student ON fee_refunds(student_user_id);
+
+
 -- ========================================================================
 -- 014_exams_management.sql
 -- Exams & Results Module Schema
@@ -2153,6 +2208,8 @@ CROSS JOIN (
     ('F',   0.00, 32.99,  0.0, 'Needs Improvement')
 ) AS g(name, min_p, max_p, gp, descr)
 ON CONFLICT (school_id, grade_name) DO NOTHING;
+
+
 -- ========================================================================
 -- 015_communication.sql
 -- Communication Module Schema
@@ -2248,14 +2305,17 @@ ALTER TABLE communications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE communication_recipients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE communication_templates ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_communications_isolation ON communications;
 CREATE POLICY p_communications_isolation ON communications FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_comm_recipients_isolation ON communication_recipients;
 CREATE POLICY p_comm_recipients_isolation ON communication_recipients FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_comm_templates_isolation ON communication_templates;
 CREATE POLICY p_comm_templates_isolation ON communication_templates FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
@@ -2318,6 +2378,8 @@ CROSS JOIN (
     )
 ) AS t(name, comm_type, subj, body, prio, ack)
 ON CONFLICT (school_id, template_name) DO NOTHING;
+
+
 -- ========================================================================
 -- 016_transport.sql
 -- Transport Management Module Schema
@@ -2520,30 +2582,37 @@ ALTER TABLE student_transport_assignments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transport_trips ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vehicle_location_history ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_vehicles_isolation ON vehicles;
 CREATE POLICY p_vehicles_isolation ON vehicles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_driver_assignments_isolation ON vehicle_driver_assignments;
 CREATE POLICY p_driver_assignments_isolation ON vehicle_driver_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_transport_routes_isolation ON transport_routes;
 CREATE POLICY p_transport_routes_isolation ON transport_routes FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_route_stops_isolation ON transport_route_stops;
 CREATE POLICY p_route_stops_isolation ON transport_route_stops FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_std_transport_isolation ON student_transport_assignments;
 CREATE POLICY p_std_transport_isolation ON student_transport_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_transport_trips_isolation ON transport_trips;
 CREATE POLICY p_transport_trips_isolation ON transport_trips FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_location_history_isolation ON vehicle_location_history;
 CREATE POLICY p_location_history_isolation ON vehicle_location_history FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
@@ -2565,6 +2634,8 @@ SELECT
     'Primary fleet bus for Dwarka route'
 FROM schools s
 ON CONFLICT (school_id, registration_number) DO NOTHING;
+
+
 -- ========================================================================
 -- 017_transport_permissions_and_drivers.sql
 -- Transport Rights Master, Role-Rights Mappings, Driver Profiles,
@@ -2682,6 +2753,7 @@ CREATE INDEX IF NOT EXISTS idx_driver_profiles_status ON transport_driver_profil
 -- Row Level Security on transport_driver_profiles
 ALTER TABLE transport_driver_profiles ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_driver_profiles_isolation ON transport_driver_profiles;
 CREATE POLICY p_driver_profiles_isolation ON transport_driver_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
@@ -2746,6 +2818,8 @@ BEGIN
             status = 'ACTIVE';
     END IF;
 END $$;
+
+
 -- ========================================================================
 -- 018_inventory_order_management.sql
 -- Complete Inventory & Order Management Module Schema
@@ -3118,58 +3192,72 @@ ALTER TABLE inventory_stock_out_details ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory_adjustments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE inventory_adjustment_details ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_inv_cat_isolation ON inventory_categories;
 CREATE POLICY p_inv_cat_isolation ON inventory_categories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_subcat_isolation ON inventory_subcategories;
 CREATE POLICY p_inv_subcat_isolation ON inventory_subcategories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_uom_isolation ON inventory_uoms;
 CREATE POLICY p_inv_uom_isolation ON inventory_uoms FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_brand_isolation ON inventory_brands;
 CREATE POLICY p_inv_brand_isolation ON inventory_brands FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_vendor_isolation ON inventory_vendors;
 CREATE POLICY p_inv_vendor_isolation ON inventory_vendors FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_products_isolation ON products;
 CREATE POLICY p_products_isolation ON products FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_skus_isolation ON skus;
 CREATE POLICY p_skus_isolation ON skus FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_stock_isolation ON inventory_stock;
 CREATE POLICY p_inv_stock_isolation ON inventory_stock FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_ledger_isolation ON inventory_stock_ledger;
 CREATE POLICY p_inv_ledger_isolation ON inventory_stock_ledger FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_po_isolation ON purchase_orders;
 CREATE POLICY p_po_isolation ON purchase_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_so_isolation ON sales_orders;
 CREATE POLICY p_so_isolation ON sales_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_stock_in_isolation ON inventory_stock_in;
 CREATE POLICY p_stock_in_isolation ON inventory_stock_in FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_stock_out_isolation ON inventory_stock_out;
 CREATE POLICY p_stock_out_isolation ON inventory_stock_out FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_adjustments_isolation ON inventory_adjustments;
 CREATE POLICY p_adjustments_isolation ON inventory_adjustments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
@@ -3218,6 +3306,8 @@ SELECT '40000000-0000-0000-0000-000000000003', p.id, '10000000-0000-0000-0000-00
 FROM permissions p
 WHERE p.module = 'inventory'
 ON CONFLICT DO NOTHING;
+
+
 -- ========================================================================
 -- 019_inventory_architecture_correction.sql
 -- Inventory Architecture Correction & SKU Master Consolidation
@@ -3272,6 +3362,8 @@ CREATE INDEX IF NOT EXISTS idx_skus_attributes ON skus USING gin(attributes);
 UPDATE schools
 SET currency = 'INR'
 WHERE currency IS NULL OR currency = '';
+
+
 -- ========================================================================
 -- 020_inventory_complete_setup.sql
 -- COMPLETE, IDEMPOTENT INVENTORY & ORDER MANAGEMENT SETUP SCRIPT
@@ -3673,70 +3765,84 @@ ALTER TABLE inventory_adjustment_details ENABLE ROW LEVEL SECURITY;
 
 -- Idempotent RLS: Drop policy if exists before recreating
 DROP POLICY IF EXISTS p_inv_cat_isolation ON inventory_categories;
+DROP POLICY IF EXISTS p_inv_cat_isolation ON inventory_categories;
 CREATE POLICY p_inv_cat_isolation ON inventory_categories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_subcat_isolation ON inventory_subcategories;
 DROP POLICY IF EXISTS p_inv_subcat_isolation ON inventory_subcategories;
 CREATE POLICY p_inv_subcat_isolation ON inventory_subcategories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_uom_isolation ON inventory_uoms;
+DROP POLICY IF EXISTS p_inv_uom_isolation ON inventory_uoms;
 CREATE POLICY p_inv_uom_isolation ON inventory_uoms FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_brand_isolation ON inventory_brands;
 DROP POLICY IF EXISTS p_inv_brand_isolation ON inventory_brands;
 CREATE POLICY p_inv_brand_isolation ON inventory_brands FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_vendor_isolation ON inventory_vendors;
+DROP POLICY IF EXISTS p_inv_vendor_isolation ON inventory_vendors;
 CREATE POLICY p_inv_vendor_isolation ON inventory_vendors FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_products_isolation ON products;
 DROP POLICY IF EXISTS p_products_isolation ON products;
 CREATE POLICY p_products_isolation ON products FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_skus_isolation ON skus;
+DROP POLICY IF EXISTS p_skus_isolation ON skus;
 CREATE POLICY p_skus_isolation ON skus FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_inv_stock_isolation ON inventory_stock;
 DROP POLICY IF EXISTS p_inv_stock_isolation ON inventory_stock;
 CREATE POLICY p_inv_stock_isolation ON inventory_stock FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_inv_ledger_isolation ON inventory_stock_ledger;
+DROP POLICY IF EXISTS p_inv_ledger_isolation ON inventory_stock_ledger;
 CREATE POLICY p_inv_ledger_isolation ON inventory_stock_ledger FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_po_isolation ON purchase_orders;
 DROP POLICY IF EXISTS p_po_isolation ON purchase_orders;
 CREATE POLICY p_po_isolation ON purchase_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_so_isolation ON sales_orders;
+DROP POLICY IF EXISTS p_so_isolation ON sales_orders;
 CREATE POLICY p_so_isolation ON sales_orders FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_stock_in_isolation ON inventory_stock_in;
 DROP POLICY IF EXISTS p_stock_in_isolation ON inventory_stock_in;
 CREATE POLICY p_stock_in_isolation ON inventory_stock_in FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
 DROP POLICY IF EXISTS p_stock_out_isolation ON inventory_stock_out;
+DROP POLICY IF EXISTS p_stock_out_isolation ON inventory_stock_out;
 CREATE POLICY p_stock_out_isolation ON inventory_stock_out FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_adjustments_isolation ON inventory_adjustments;
 DROP POLICY IF EXISTS p_adjustments_isolation ON inventory_adjustments;
 CREATE POLICY p_adjustments_isolation ON inventory_adjustments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
@@ -3785,6 +3891,8 @@ ON CONFLICT (role_id, permission_id) DO NOTHING;
 UPDATE schools
 SET currency = 'INR'
 WHERE currency IS NULL OR currency = '';
+
+
 -- ========================================================================
 -- Migration 021: Asset Management Module Schema
 -- Physical asset tracking: categories, master, assignment history,
@@ -3998,29 +4106,39 @@ ALTER TABLE asset_maintenance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE asset_disposals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE asset_documents ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS asset_categories_tenant_isolation ON asset_categories;
 CREATE POLICY asset_categories_tenant_isolation ON asset_categories
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_subcategories_tenant_isolation ON asset_subcategories;
 CREATE POLICY asset_subcategories_tenant_isolation ON asset_subcategories
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS assets_tenant_isolation ON assets;
 CREATE POLICY assets_tenant_isolation ON assets
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_assignments_tenant_isolation ON asset_assignments;
 CREATE POLICY asset_assignments_tenant_isolation ON asset_assignments
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_movements_tenant_isolation ON asset_movements;
 CREATE POLICY asset_movements_tenant_isolation ON asset_movements
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_maintenance_tenant_isolation ON asset_maintenance;
 CREATE POLICY asset_maintenance_tenant_isolation ON asset_maintenance
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_disposals_tenant_isolation ON asset_disposals;
 CREATE POLICY asset_disposals_tenant_isolation ON asset_disposals
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_documents_tenant_isolation ON asset_documents;
 CREATE POLICY asset_documents_tenant_isolation ON asset_documents
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
+
+
 -- ============================================================================
 -- Migration: 022_library_management.sql
 -- Description: Complete Library Management Module schema for multi-tenant SaaS
@@ -4291,41 +4409,55 @@ ALTER TABLE library_fines ENABLE ROW LEVEL SECURITY;
 ALTER TABLE library_lost_damaged ENABLE ROW LEVEL SECURITY;
 
 -- Tenant Isolation Policies
+DROP POLICY IF EXISTS library_settings_tenant_policy ON library_settings;
 CREATE POLICY library_settings_tenant_policy ON library_settings FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_categories_tenant_policy ON library_categories;
 CREATE POLICY library_categories_tenant_policy ON library_categories FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_authors_tenant_policy ON library_authors;
 CREATE POLICY library_authors_tenant_policy ON library_authors FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_publishers_tenant_policy ON library_publishers;
 CREATE POLICY library_publishers_tenant_policy ON library_publishers FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_books_tenant_policy ON library_books;
 CREATE POLICY library_books_tenant_policy ON library_books FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_book_authors_tenant_policy ON library_book_authors;
 CREATE POLICY library_book_authors_tenant_policy ON library_book_authors FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_book_copies_tenant_policy ON library_book_copies;
 CREATE POLICY library_book_copies_tenant_policy ON library_book_copies FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_members_tenant_policy ON library_members;
 CREATE POLICY library_members_tenant_policy ON library_members FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_issues_tenant_policy ON library_issues;
 CREATE POLICY library_issues_tenant_policy ON library_issues FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_reservations_tenant_policy ON library_reservations;
 CREATE POLICY library_reservations_tenant_policy ON library_reservations FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_fines_tenant_policy ON library_fines;
 CREATE POLICY library_fines_tenant_policy ON library_fines FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS library_lost_damaged_tenant_policy ON library_lost_damaged;
 CREATE POLICY library_lost_damaged_tenant_policy ON library_lost_damaged FOR ALL
     USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
+
+
 -- ========================================================================
 -- Migration 023: Centralized School Currency & Localization Settings
 -- Multi-Tenant SaaS School Management System
@@ -4410,6 +4542,8 @@ SELECT
 FROM schools s
 ON CONFLICT (school_id, setting_key) DO UPDATE
 SET setting_value = EXCLUDED.setting_value, updated_at = NOW();
+
+
 -- ========================================================================
 -- Migration 024: Admissions & Enquiry CRM Pipeline (Corrected)
 -- Multi-Tenant SaaS School Management System
@@ -4529,6 +4663,7 @@ ALTER TABLE admission_applications ENABLE ROW LEVEL SECURITY;
 
 -- 6. TENANT ISOLATION POLICIES (Preserves strict multi-tenant boundary)
 DROP POLICY IF EXISTS p_admission_sources_tenant_isolation ON admission_sources;
+DROP POLICY IF EXISTS p_admission_sources_tenant_isolation ON admission_sources;
 CREATE POLICY p_admission_sources_tenant_isolation ON admission_sources
     FOR ALL
     USING (
@@ -4542,6 +4677,7 @@ CREATE POLICY p_admission_sources_tenant_isolation ON admission_sources
         OR school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID
     );
 
+DROP POLICY IF EXISTS p_admission_enquiries_tenant_isolation ON admission_enquiries;
 DROP POLICY IF EXISTS p_admission_enquiries_tenant_isolation ON admission_enquiries;
 CREATE POLICY p_admission_enquiries_tenant_isolation ON admission_enquiries
     FOR ALL
@@ -4557,6 +4693,7 @@ CREATE POLICY p_admission_enquiries_tenant_isolation ON admission_enquiries
     );
 
 DROP POLICY IF EXISTS p_admission_followups_tenant_isolation ON admission_followups;
+DROP POLICY IF EXISTS p_admission_followups_tenant_isolation ON admission_followups;
 CREATE POLICY p_admission_followups_tenant_isolation ON admission_followups
     FOR ALL
     USING (
@@ -4570,6 +4707,7 @@ CREATE POLICY p_admission_followups_tenant_isolation ON admission_followups
         OR school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID
     );
 
+DROP POLICY IF EXISTS p_admission_applications_tenant_isolation ON admission_applications;
 DROP POLICY IF EXISTS p_admission_applications_tenant_isolation ON admission_applications;
 CREATE POLICY p_admission_applications_tenant_isolation ON admission_applications
     FOR ALL
@@ -4604,3 +4742,5 @@ ON CONFLICT (school_id, code) DO NOTHING;
 INSERT INTO admission_sources (school_id, name, code)
 SELECT s.id, 'Education Fair / Expo', 'EXPO' FROM schools s
 ON CONFLICT (school_id, code) DO NOTHING;
+
+

@@ -213,42 +213,52 @@ ALTER TABLE academic_class_subjects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE student_academic_enrollments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE teacher_subject_assignments ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_academic_sessions_isolation ON academic_sessions;
 CREATE POLICY p_academic_sessions_isolation ON academic_sessions FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_classes_isolation ON classes;
 CREATE POLICY p_classes_isolation ON classes FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_sections_isolation ON sections;
 CREATE POLICY p_sections_isolation ON sections FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_academic_class_sections_isolation ON academic_class_sections;
 CREATE POLICY p_academic_class_sections_isolation ON academic_class_sections FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subjects_isolation ON subjects;
 CREATE POLICY p_subjects_isolation ON subjects FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subject_groups_isolation ON subject_groups;
 CREATE POLICY p_subject_groups_isolation ON subject_groups FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_subject_group_items_isolation ON subject_group_items;
 CREATE POLICY p_subject_group_items_isolation ON subject_group_items FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_academic_class_subjects_isolation ON academic_class_subjects;
 CREATE POLICY p_academic_class_subjects_isolation ON academic_class_subjects FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_student_academic_enrollments_isolation ON student_academic_enrollments;
 CREATE POLICY p_student_academic_enrollments_isolation ON student_academic_enrollments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_teacher_subject_assignments_isolation ON teacher_subject_assignments;
 CREATE POLICY p_teacher_subject_assignments_isolation ON teacher_subject_assignments FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());

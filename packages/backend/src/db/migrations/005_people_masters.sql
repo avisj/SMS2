@@ -191,34 +191,42 @@ ALTER TABLE student_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE staff_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE parent_student_relationships ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_designations_isolation ON designations;
 CREATE POLICY p_designations_isolation ON designations FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_categories_isolation ON user_categories;
 CREATE POLICY p_user_categories_isolation ON user_categories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_subcategories_isolation ON user_subcategories;
 CREATE POLICY p_user_subcategories_isolation ON user_subcategories FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_tags_isolation ON user_tags;
 CREATE POLICY p_user_tags_isolation ON user_tags FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_user_labels_isolation ON user_labels;
 CREATE POLICY p_user_labels_isolation ON user_labels FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_student_profiles_isolation ON student_profiles;
 CREATE POLICY p_student_profiles_isolation ON student_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_staff_profiles_isolation ON staff_profiles;
 CREATE POLICY p_staff_profiles_isolation ON staff_profiles FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_parent_student_isolation ON parent_student_relationships;
 CREATE POLICY p_parent_student_isolation ON parent_student_relationships FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());

@@ -211,26 +211,34 @@ ALTER TABLE asset_maintenance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE asset_disposals ENABLE ROW LEVEL SECURITY;
 ALTER TABLE asset_documents ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS asset_categories_tenant_isolation ON asset_categories;
 CREATE POLICY asset_categories_tenant_isolation ON asset_categories
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_subcategories_tenant_isolation ON asset_subcategories;
 CREATE POLICY asset_subcategories_tenant_isolation ON asset_subcategories
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS assets_tenant_isolation ON assets;
 CREATE POLICY assets_tenant_isolation ON assets
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_assignments_tenant_isolation ON asset_assignments;
 CREATE POLICY asset_assignments_tenant_isolation ON asset_assignments
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_movements_tenant_isolation ON asset_movements;
 CREATE POLICY asset_movements_tenant_isolation ON asset_movements
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_maintenance_tenant_isolation ON asset_maintenance;
 CREATE POLICY asset_maintenance_tenant_isolation ON asset_maintenance
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_disposals_tenant_isolation ON asset_disposals;
 CREATE POLICY asset_disposals_tenant_isolation ON asset_disposals
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);
 
+DROP POLICY IF EXISTS asset_documents_tenant_isolation ON asset_documents;
 CREATE POLICY asset_documents_tenant_isolation ON asset_documents
     FOR ALL USING (school_id = NULLIF(current_setting('app.current_school_id', true), '')::UUID);

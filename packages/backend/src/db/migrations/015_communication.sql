@@ -93,14 +93,17 @@ ALTER TABLE communications ENABLE ROW LEVEL SECURITY;
 ALTER TABLE communication_recipients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE communication_templates ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS p_communications_isolation ON communications;
 CREATE POLICY p_communications_isolation ON communications FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_comm_recipients_isolation ON communication_recipients;
 CREATE POLICY p_comm_recipients_isolation ON communication_recipients FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
 
+DROP POLICY IF EXISTS p_comm_templates_isolation ON communication_templates;
 CREATE POLICY p_comm_templates_isolation ON communication_templates FOR ALL
     USING (is_platform_super_admin() = TRUE OR school_id = current_school_id())
     WITH CHECK (is_platform_super_admin() = TRUE OR school_id = current_school_id());
