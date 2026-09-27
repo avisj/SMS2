@@ -1076,7 +1076,7 @@ export const Sidebar: React.FC = () => {
               <GraduationCap className="w-4 h-4" />
             </div>
             <span className="font-semibold text-white text-sm tracking-wide">
-              EduCloud SMS
+              eSchool
             </span>
           </div>
         </div>
@@ -1168,13 +1168,13 @@ export const Sidebar: React.FC = () => {
         <div className="flex flex-col items-center mb-2 shrink-0">
           <div
             className="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-md cursor-pointer hover:scale-105 transition-transform"
-            title="EduCloud SMS"
+            title="eSchool"
             onClick={() => handleCategoryClick('DASHBOARD')}
           >
             <GraduationCap className="w-5 h-5" />
           </div>
           <span className="text-[9px] font-bold tracking-tight text-slate-400 mt-1 uppercase">
-            EduCloud
+            eSchool
           </span>
         </div>
 

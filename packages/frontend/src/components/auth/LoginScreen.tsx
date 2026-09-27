@@ -48,7 +48,7 @@ export const LoginScreen: React.FC = () => {
           </div>
         </div>
         <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-white">
-          EduCloud SMS SaaS
+          eSchool
         </h2>
         <p className="mt-1 text-center text-xs text-slate-400">
           Multi-Tenant School Management Platform • Foundation

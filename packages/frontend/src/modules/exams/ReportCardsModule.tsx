@@ -577,7 +577,7 @@ export const ReportCardsModule: React.FC<ReportCardsModuleProps> = ({ onNavigate
 
           {/* Footer stamp */}
           <div className="mt-8 pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400">
-            Generated securely via EduCloud SMS • Date: {new Date().toLocaleDateString()}
+            Generated securely via eSchool SMS • Date: {new Date().toLocaleDateString()}
           </div>
         </div>
       )}

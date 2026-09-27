@@ -1,7 +1,7 @@
 // ========================================================================
 // Shared Style Tokens & Helper Classes
 // Centralized classes for Tables, Pagination, Checkboxes, Tabs, Cards & Links
-// Guarantees consistent stable EduCloud teal identity across all modules
+// Guarantees consistent stable eSchool teal identity across all modules
 // ========================================================================
 
 export const tableStyles = {

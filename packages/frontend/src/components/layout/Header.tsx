@@ -42,7 +42,7 @@ export const Header: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <span className="font-semibold text-xs md:text-sm text-slate-900 leading-tight">
-                {userContext?.school_name || 'EduCloud SaaS Platform'}
+                {userContext?.school_name || 'eSchool Platform'}
               </span>
               {userContext?.school_code && (
                 <Badge variant="primary" size="sm">

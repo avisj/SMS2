@@ -587,7 +587,7 @@ export const AttendanceReportsModule: React.FC<AttendanceReportsModuleProps> = (
         {/* Printable Institution Header */}
         <div className="p-4 bg-white border border-slate-200 rounded-xl text-center shadow-xs">
           <h2 className="text-base font-bold text-slate-900 tracking-wide uppercase">
-            EduCloud Multi-Tenant Academy
+            eSchool Multi-Tenant Academy
           </h2>
           <div className="text-xs text-slate-600 mt-0.5">
             Official Institutional Attendance Register •{' '}
