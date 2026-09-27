@@ -68,7 +68,6 @@ import {
   ShieldCheck,
   ChevronRight,
   ChevronDown,
-  X,
 } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext.js';
 import { usePermission } from '../../hooks/usePermission.js';
@@ -1264,32 +1263,18 @@ export const Sidebar: React.FC = () => {
           onMouseEnter={handleNavContainerMouseEnter}
           onMouseLeave={handleNavContainerMouseLeave}
         >
-          {/* Flyout Header */}
-          <div className="h-11 px-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-teal-400 shrink-0">{activeCategory.icon}</span>
-              <div className="min-w-0">
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider truncate">
-                  {activeCategory.title}
-                </h3>
-                <p className="text-[10px] text-slate-400 truncate">
-                  {activeVisibleItems.length} module{activeVisibleItems.length !== 1 ? 's' : ''}
-                </p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setFlyoutOpen(false)}
-              className="p-1 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-              title="Close flyout (Esc)"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+          {/* Flyout Header: Clean title & module count (no duplicate icon, no close button) */}
+          <div className="px-3.5 py-2.5 border-b border-slate-800 shrink-0 bg-slate-900">
+            <h3 className="text-xs font-bold text-white uppercase tracking-wider truncate">
+              {activeCategory.title}
+            </h3>
+            <p className="text-[10px] text-slate-400 mt-0.5 truncate">
+              {activeVisibleItems.length} module{activeVisibleItems.length !== 1 ? 's' : ''}
+            </p>
           </div>
 
-          {/* Flyout Submenu List (Content-Height, scrolls only if exceeding max-height) */}
-          <div className="overflow-y-auto p-1.5 space-y-0.5 bg-slate-900 min-h-0 scrollbar-thin scrollbar-thumb-slate-700">
+          {/* Flyout Submenu List (Content-Height, natural compact bottom padding, scrolls only if exceeding max-height) */}
+          <div className="overflow-y-auto p-1.5 pb-2 space-y-0.5 bg-slate-900 min-h-0 scrollbar-thin scrollbar-thumb-slate-700">
             {activeVisibleItems.length === 0 ? (
               <div className="p-3 text-center text-xs text-slate-500">
                 No accessible modules under this category.
@@ -1312,12 +1297,6 @@ export const Sidebar: React.FC = () => {
                 );
               })
             )}
-          </div>
-
-          {/* Flyout Footer info */}
-          <div className="px-3 py-1.5 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between text-[10px] text-slate-500 shrink-0">
-            <span>Hover Flyout</span>
-            <span className="text-[9px] text-slate-500">Esc to close</span>
           </div>
         </div>
       )}
