@@ -36,7 +36,7 @@ export const env = {
 };
 
 export const isDatabaseConfigured = (): boolean => {
-  const url = env.DATABASE_URL;
+  const url = env.DATABASE_URL?.trim();
   if (!url) return false;
   if (
     url.includes('postgres.xxx') ||
@@ -45,6 +45,12 @@ export const isDatabaseConfigured = (): boolean => {
     url.includes('YOUR_PASSWORD') ||
     url.includes(':password@')
   ) {
+    return false;
+  }
+  try {
+    const parsed = new URL(url);
+    if (!parsed.protocol.startsWith('postgres')) return false;
+  } catch {
     return false;
   }
   if (process.env.NODE_ENV === 'test') return false;
