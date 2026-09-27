@@ -27,7 +27,7 @@ INSERT INTO user_types (id, school_id, code, name, description, is_system, is_ac
     ('20000000-0000-0000-0000-000000000006', NULL, 'STUDENT', 'Student', 'Enrolled student learner', TRUE, TRUE),
     ('20000000-0000-0000-0000-000000000007', NULL, 'PARENT', 'Parent / Guardian', 'Parent or legal guardian of enrolled students', TRUE, TRUE),
     ('20000000-0000-0000-0000-000000000008', NULL, 'OTHER', 'Other / External', 'External auditors, contractors, or guest users', TRUE, TRUE)
-ON CONFLICT (school_id, code) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 -- 3. PERMISSIONS (Master System Register)
 INSERT INTO permissions (id, module, action, code, name, description, default_scope_id, is_system) VALUES
@@ -70,7 +70,7 @@ INSERT INTO roles (id, school_id, code, name, description, is_system, is_active)
     ('40000000-0000-0000-0000-000000000006', NULL, 'STAFF', 'Staff Member', 'Operational and administrative support staff', TRUE, TRUE),
     ('40000000-0000-0000-0000-000000000007', NULL, 'STUDENT', 'Student', 'Student access to own academic records and submissions', TRUE, TRUE),
     ('40000000-0000-0000-0000-000000000008', NULL, 'PARENT', 'Parent / Guardian', 'Parent access to linked children performance and fees', TRUE, TRUE)
-ON CONFLICT (school_id, code) DO NOTHING;
+ON CONFLICT (id) DO NOTHING;
 
 -- 5. MAP ROLE PERMISSIONS FOR SYSTEM TEMPLATES
 -- Super Admin: All permissions with ALL_SCHOOLS scope
