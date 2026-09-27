@@ -51,14 +51,34 @@ export class ProfileRepository {
 
   async createStudentProfile(data: Omit<StudentProfile, 'id' | 'created_at' | 'updated_at'>): Promise<StudentProfile> {
     if (isSupabaseDatabaseActive() && getSupabaseClient()) {
+      const payload: any = {
+        user_id: data.user_id,
+        school_id: data.school_id,
+        admission_number: data.admission_number,
+        admission_date: data.admission_date && data.admission_date.trim() ? data.admission_date : null,
+        roll_number: data.roll_number || null,
+        academic_session: data.academic_session || null,
+        class_name: data.class_name || null,
+        section_name: data.section_name || null,
+        house: data.house || null,
+        stream: data.stream || null,
+        medium: data.medium || null,
+        blood_group: data.blood_group || null,
+        emergency_contact_name: data.emergency_contact_name || null,
+        emergency_contact_phone: data.emergency_contact_phone || null,
+      };
+
       const { data: inserted, error } = await getSupabaseClient()!
         .from('student_profiles')
-        .insert(data)
+        .insert(payload)
         .select()
         .single();
       if (!error && inserted) {
         this.mem.getTable('student_profiles').set(inserted.id, inserted);
         return inserted as StudentProfile;
+      }
+      if (error) {
+        console.error('[ProfileRepo] Supabase createStudentProfile error:', error);
       }
     }
     return this.mem.insert('student_profiles', data) as StudentProfile;
@@ -66,9 +86,20 @@ export class ProfileRepository {
 
   async updateStudentProfile(userId: string, updates: Partial<StudentProfile>): Promise<StudentProfile | null> {
     if (isSupabaseDatabaseActive() && getSupabaseClient()) {
+      const cleanUpdates: any = { ...updates, updated_at: new Date().toISOString() };
+      if (cleanUpdates.admission_date !== undefined) {
+        cleanUpdates.admission_date = cleanUpdates.admission_date && cleanUpdates.admission_date.trim() ? cleanUpdates.admission_date : null;
+      }
+      delete cleanUpdates.gender;
+      delete cleanUpdates.date_of_birth;
+      delete cleanUpdates.current_enrollment;
+      delete cleanUpdates.previous_academic_records;
+      delete cleanUpdates.achievements;
+      delete cleanUpdates.documents;
+
       await getSupabaseClient()!
         .from('student_profiles')
-        .update({ ...updates, updated_at: new Date().toISOString() })
+        .update(cleanUpdates)
         .eq('user_id', userId);
     }
     const existing = await this.getStudentProfile(userId);

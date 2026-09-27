@@ -115,6 +115,20 @@ export class UserRepository {
           };
         }
       }
+
+      if (!finalStudentProfile && userType?.code === 'STUDENT') {
+        finalStudentProfile = {
+          id: u.id,
+          user_id: u.id,
+          school_id: u.school_id || '',
+          admission_number: 'ADM-' + (u.id.slice(0, 6).toUpperCase()),
+          academic_session: '2026-27',
+          class_name: 'Unassigned',
+          section_name: '',
+          created_at: u.created_at,
+          updated_at: u.updated_at,
+        };
+      }
     }
 
     if (finalStudentProfile) {
@@ -348,10 +362,23 @@ export class UserRepository {
 
     // Apply academic dimensions filtering
     return baseStudents.filter(u => {
-      const sp = u.student_profile;
-      if (!sp) return false;
+      let sp = u.student_profile;
+      if (!sp) {
+        sp = {
+          id: u.id,
+          user_id: u.id,
+          school_id: u.school_id || '',
+          admission_number: 'ADM-' + (u.id.slice(0, 6).toUpperCase()),
+          academic_session: '2026-27',
+          class_name: 'Unassigned',
+          section_name: '',
+          created_at: u.created_at,
+          updated_at: u.updated_at,
+        };
+        u.student_profile = sp;
+      }
 
-      if (filters.academicSession && sp.academic_session !== filters.academicSession) return false;
+      if (filters.academicSession && sp.academic_session && sp.academic_session !== filters.academicSession) return false;
       if (filters.className) {
         const filterCls = filters.className.toLowerCase().replace(/^class\s*/i, '').trim();
         const studentCls = (sp.class_name || '').toLowerCase().replace(/^class\s*/i, '').trim();

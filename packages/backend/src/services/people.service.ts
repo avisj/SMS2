@@ -593,19 +593,39 @@ export class PeopleService {
       throw new Error(`Admission Number '${input.admission_number}' is already registered in this school`);
     }
 
-    // 3. Validate username & email uniqueness
-    const existingUser = await userRepository.findByUsername(input.username);
-    if (existingUser) throw new Error(`Username '${input.username}' is already taken`);
+    // 3. Validate username & email uniqueness (auto-disambiguate if not custom credentials)
+    let finalUsername = input.username;
+    const existingUser = await userRepository.findByUsername(finalUsername);
+    if (existingUser) {
+      if (!input.create_login_access) {
+        const admSuffix = input.admission_number ? input.admission_number.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+        let candidate = admSuffix ? `${finalUsername}.${admSuffix}`.slice(0, 50) : `${finalUsername}1`.slice(0, 50);
+        let counter = 1;
+        while (await userRepository.findByUsername(candidate)) {
+          candidate = `${finalUsername}${++counter}`.slice(0, 50);
+        }
+        finalUsername = candidate;
+      } else {
+        throw new Error(`Username '${finalUsername}' is already taken`);
+      }
+    }
 
-    const existingEmail = await userRepository.findByEmail(input.email);
-    if (existingEmail) throw new Error(`Email '${input.email}' is already registered`);
+    let finalEmail = input.email;
+    const existingEmail = await userRepository.findByEmail(finalEmail);
+    if (existingEmail) {
+      if (!input.create_login_access) {
+        finalEmail = `${finalUsername}@student.sms.internal`;
+      } else {
+        throw new Error(`Email '${finalEmail}' is already registered`);
+      }
+    }
 
     // 4. Create base user record in universal users table
     const user = await userRepository.create({
       school_id: schoolId,
       user_type_id: studentUserType.id,
-      username: input.username,
-      email: input.email,
+      username: finalUsername,
+      email: finalEmail,
       phone: input.phone,
       first_name: input.first_name,
       middle_name: input.middle_name,
@@ -634,7 +654,7 @@ export class PeopleService {
         school_id: schoolId,
         location_id: input.location_id,
         school_id_code: schoolIdCode,
-        username: input.username,
+        username: finalUsername,
         password_hash: hashPassword(password),
         login_status: input.login_status || 'ACTIVE',
         is_super_admin: false,
@@ -657,10 +677,8 @@ export class PeopleService {
       stream: input.stream,
       medium: input.medium,
       house: input.house,
-      gender: input.gender,
-      date_of_birth: input.date_of_birth,
       blood_group: input.blood_group,
-      admission_date: input.admission_date || new Date().toISOString().split('T')[0],
+      admission_date: input.admission_date && input.admission_date.trim() ? input.admission_date : new Date().toISOString().split('T')[0],
       emergency_contact_name: input.emergency_contact_name,
       emergency_contact_phone: input.emergency_contact_phone,
     });
@@ -680,13 +698,19 @@ export class PeopleService {
         targetClass = await academicRepository.findClassById(input.class_id, schoolId);
       }
       if (!targetClass && input.class_name) {
-        const cName = input.class_name.toLowerCase();
+        const cName = input.class_name.toLowerCase().trim();
+        const cleanCls = cName.replace(/^class\s*/i, '').trim();
         const classes = await academicRepository.findClasses(schoolId);
-        targetClass = classes.find(c =>
-          c.name.toLowerCase() === cName ||
-          c.display_name?.toLowerCase() === cName ||
-          c.code?.toLowerCase() === cName
-        ) || null;
+        targetClass = classes.find(c => {
+          const nameClean = c.name.toLowerCase().replace(/^class\s*/i, '').trim();
+          const dispClean = (c.display_name || '').toLowerCase().replace(/^class\s*/i, '').trim();
+          const codeClean = (c.code || '').toLowerCase().replace(/^cls-?/i, '').trim();
+          return c.name.toLowerCase() === cName ||
+                 c.display_name?.toLowerCase() === cName ||
+                 nameClean === cleanCls ||
+                 dispClean === cleanCls ||
+                 codeClean === cleanCls;
+        }) || null;
       }
 
       let targetSection = null;
@@ -694,11 +718,17 @@ export class PeopleService {
         targetSection = await academicRepository.findSectionById(input.section_id, schoolId);
       }
       if (!targetSection && input.section_name) {
+        const sName = input.section_name.toLowerCase().trim();
+        const cleanSec = sName.replace(/^section\s*/i, '').trim();
         const sections = await academicRepository.findSections(schoolId);
-        targetSection = sections.find(s =>
-          s.name.toLowerCase() === input.section_name!.toLowerCase() ||
-          s.code?.toLowerCase() === input.section_name!.toLowerCase()
-        ) || null;
+        targetSection = sections.find(s => {
+          const nameClean = s.name.toLowerCase().replace(/^section\s*/i, '').trim();
+          const codeClean = (s.code || '').toLowerCase().replace(/^sec-?/i, '').trim();
+          return s.name.toLowerCase() === sName ||
+                 (s.code && s.code.toLowerCase() === sName) ||
+                 nameClean === cleanSec ||
+                 codeClean === cleanSec;
+        }) || null;
       }
 
       if (session && targetClass && targetSection && input.location_id) {
@@ -714,6 +744,8 @@ export class PeopleService {
           });
         }
 
+        const validActorId = actorId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(actorId) ? actorId : undefined;
+
         await academicRepository.createEnrollment({
           school_id: schoolId,
           student_user_id: user.id,
@@ -725,8 +757,8 @@ export class PeopleService {
           admission_number: input.admission_number,
           roll_number: input.roll_number || null,
           enrollment_status: 'ENROLLED',
-          start_date: input.admission_date || new Date().toISOString().split('T')[0],
-          created_by: actorId,
+          start_date: input.admission_date && input.admission_date.trim() ? input.admission_date : new Date().toISOString().split('T')[0],
+          created_by: validActorId,
         });
       }
     } catch (enrollErr) {

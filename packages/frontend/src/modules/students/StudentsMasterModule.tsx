@@ -351,7 +351,8 @@ export const StudentsMasterModule: React.FC<StudentsMasterModuleProps> = ({ tabI
     // 4. Auto-generate Username and Email if blank
     const cleanFirst = enrollForm.first_name.trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'student';
     const cleanLast = (enrollForm.last_name || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-    const defaultUsername = cleanLast ? `${cleanFirst}.${cleanLast}` : `${cleanFirst}.${finalAdmissionNo.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+    const cleanAdm = finalAdmissionNo.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const defaultUsername = cleanLast ? `${cleanFirst}.${cleanLast}.${cleanAdm.slice(-3)}` : `${cleanFirst}.${cleanAdm}`;
     const finalUsername = enrollForm.username?.trim() || defaultUsername;
     const finalEmail = enrollForm.email?.trim() || `${finalUsername}@student.dpa.edu`;
 

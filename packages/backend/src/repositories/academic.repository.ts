@@ -1051,13 +1051,38 @@ export class AcademicRepository {
     const memRecord = this.mem.insert('student_academic_enrollments', data) as StudentAcademicEnrollment;
     if (isSupabaseDatabaseActive() && getSupabaseClient()) {
       try {
+        const payload: any = {
+          school_id: data.school_id,
+          student_user_id: data.student_user_id,
+          academic_session_id: data.academic_session_id,
+          location_id: data.location_id,
+          class_id: data.class_id,
+          section_id: data.section_id,
+          academic_class_section_id: data.academic_class_section_id || null,
+          admission_number: data.admission_number,
+          roll_number: data.roll_number || null,
+          enrollment_status: data.enrollment_status || 'ENROLLED',
+          start_date: data.start_date || new Date().toISOString().split('T')[0],
+          end_date: data.end_date || null,
+        };
+        if (data.created_by && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.created_by)) {
+          payload.created_by = data.created_by;
+        }
+        if (data.updated_by && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(data.updated_by)) {
+          payload.updated_by = data.updated_by;
+        }
+
         const { data: inserted, error } = await getSupabaseClient()!
           .from('student_academic_enrollments')
-          .insert(memRecord)
+          .insert(payload)
           .select('*')
           .single();
         if (!error && inserted) {
+          this.mem.getTable('student_academic_enrollments').set(inserted.id, inserted);
           return inserted as StudentAcademicEnrollment;
+        }
+        if (error) {
+          console.error('[AcademicRepo] Error persisting enrollment to Supabase:', error);
         }
       } catch (err) {
         console.warn('[AcademicRepo] Error persisting enrollment to Supabase:', err);
