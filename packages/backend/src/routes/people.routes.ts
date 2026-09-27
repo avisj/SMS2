@@ -366,6 +366,16 @@ peopleRouter.get('/students', requirePermission('users.view'), async (req: Reque
 
 peopleRouter.post('/students', requirePermission('users.create'), async (req: Request, res: Response): Promise<void> => {
   try {
+    const rawBody = { ...req.body };
+    const rawFirst = (rawBody.first_name || 'student').trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'student';
+    const rawAdmission = (rawBody.admission_number || Date.now().toString().slice(-4)).trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (!rawBody.username || !rawBody.username.trim()) {
+      rawBody.username = `${rawFirst}.${rawAdmission}`.slice(0, 50);
+    }
+    if (!rawBody.email || !rawBody.email.trim()) {
+      rawBody.email = `${rawBody.username}@student.sms.internal`;
+    }
+
     const schema = z.object({
       username: z.string().min(3).max(100),
       email: z.string().email(),
@@ -444,11 +454,14 @@ peopleRouter.post('/students', requirePermission('users.create'), async (req: Re
         }
       }
     });
-    const parsed = schema.parse(req.body);
+    const parsed = schema.parse(rawBody);
     const created = await peopleService.createStudent(req.userContext!.school_id!, parsed, req.userContext!.user_id);
     res.status(201).json({ success: true, data: created });
   } catch (err: any) {
-    res.status(400).json({ success: false, error: { message: err.message } });
+    const message = err instanceof z.ZodError
+      ? err.issues.map(i => `${i.path.join('.') || 'field'}: ${i.message}`).join(', ')
+      : err.message || 'Failed to create student';
+    res.status(400).json({ success: false, error: { message } });
   }
 });
 

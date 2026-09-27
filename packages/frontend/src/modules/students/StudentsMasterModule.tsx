@@ -303,9 +303,57 @@ export const StudentsMasterModule: React.FC<StudentsMasterModuleProps> = ({ tabI
     setDocumentsList(prev => prev.map((d, i) => i === index ? { ...d, [field]: val } : d));
   };
 
+  const handleOpenEnrollModal = () => {
+    const nextNum = (students.length + 1).toString().padStart(3, '0');
+    const autoAdm = `ADM-${new Date().getFullYear()}-${nextNum}`;
+    setEnrollForm(prev => ({
+      ...prev,
+      admission_number: prev.admission_number || autoAdm,
+      class_name: prev.class_name || (classesList[0]?.name || classesList[0]?.display_name || 'Class 10'),
+      section_name: prev.section_name || (sectionsList[0]?.name || 'Section A'),
+      academic_session: prev.academic_session || currentSession?.name || '2025-2026',
+      location_id: prev.location_id || locations[0]?.id || activeBranch?.id || '',
+      nationality: prev.nationality || 'Indian',
+      blood_group: prev.blood_group || 'O+',
+      category_name: prev.category_name || 'General',
+    }));
+    setActiveEnrollTab('basic');
+    setErrorMessage(null);
+    setIsEnrollOpen(true);
+  };
+
   const handleEnrollSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+
+    // 1. Validate First Name
+    if (!enrollForm.first_name?.trim()) {
+      setErrorMessage('Please enter the student\'s First Name.');
+      setActiveEnrollTab('basic');
+      return;
+    }
+
+    // 2. Validate Admission Number
+    const autoAdm = `ADM-${new Date().getFullYear()}-${(students.length + 1).toString().padStart(3, '0')}`;
+    const finalAdmissionNo = enrollForm.admission_number?.trim() || autoAdm;
+
+    // 3. Validate Academic Placement
+    const finalLocationId = enrollForm.location_id || locations[0]?.id || activeBranch?.id;
+    if (!finalLocationId) {
+      setErrorMessage('Please select a Campus Location in Academic Placement.');
+      setActiveEnrollTab('academic');
+      return;
+    }
+
+    const finalSession = enrollForm.academic_session?.trim() || currentSession?.name || '2025-2026';
+    const finalClass = enrollForm.class_name?.trim() || (classesList[0]?.name || classesList[0]?.display_name || 'Class 10');
+
+    // 4. Auto-generate Username and Email if blank
+    const cleanFirst = enrollForm.first_name.trim().toLowerCase().replace(/[^a-z0-9]/g, '') || 'student';
+    const cleanLast = (enrollForm.last_name || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const defaultUsername = cleanLast ? `${cleanFirst}.${cleanLast}` : `${cleanFirst}.${finalAdmissionNo.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+    const finalUsername = enrollForm.username?.trim() || defaultUsername;
+    const finalEmail = enrollForm.email?.trim() || `${finalUsername}@student.dpa.edu`;
 
     if (enrollForm.create_login_access) {
       if (!enrollForm.login_password || enrollForm.login_password.length < 6) {
@@ -325,6 +373,12 @@ export const StudentsMasterModule: React.FC<StudentsMasterModuleProps> = ({ tabI
     try {
       const payload: any = {
         ...enrollForm,
+        admission_number: finalAdmissionNo,
+        location_id: finalLocationId,
+        academic_session: finalSession,
+        class_name: finalClass,
+        username: finalUsername,
+        email: finalEmail,
         previous_academic_records: prevSchoolRecords.filter(r => r.previous_school_name.trim()),
         achievements: achievementsList.filter(a => a.title.trim()),
         documents: documentsList.filter(d => d.document_name.trim() && d.file_url.trim()),
@@ -403,7 +457,7 @@ export const StudentsMasterModule: React.FC<StudentsMasterModuleProps> = ({ tabI
         </div>
 
         {hasPermission('users.create') && (
-          <Button variant="primary" onClick={() => setIsEnrollOpen(true)}>
+          <Button variant="primary" onClick={handleOpenEnrollModal}>
             <Plus className="w-4 h-4 mr-1.5" />
             Enroll New Student
           </Button>

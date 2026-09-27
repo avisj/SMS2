@@ -82,7 +82,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok || data.success === false) {
-    const errorMsg = data?.error?.message || response.statusText || 'An error occurred';
+    let errorMsg = data?.error?.message || response.statusText || 'An error occurred';
+    try {
+      if (typeof errorMsg === 'string' && (errorMsg.startsWith('[') || errorMsg.startsWith('{'))) {
+        const parsed = JSON.parse(errorMsg);
+        if (Array.isArray(parsed)) {
+          errorMsg = parsed.map((item: any) => `${item.path?.join('.') || 'Field'}: ${item.message}`).join('; ');
+        } else if (parsed && typeof parsed === 'object' && parsed.message) {
+          errorMsg = parsed.message;
+        }
+      }
+    } catch {}
     const errorCode = data?.error?.code || `HTTP_${response.status}`;
     throw new ApiError(errorMsg, errorCode, response.status, data?.error?.details);
   }
