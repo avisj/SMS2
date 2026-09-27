@@ -5,7 +5,7 @@
 // ZERO hardcoded role checks - strictly evaluates dynamic permissions
 // ========================================================================
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import {
   LayoutDashboard,
   Building,
@@ -1001,16 +1001,49 @@ export const Sidebar: React.FC = () => {
     categories.find(c => c.id === activeCategoryId) || categories[0];
   const activeVisibleItems = activeCategory.items.filter(filterItem);
 
+  // Contextual Hover Flyout Positioning (Content-Height, Dynamic Y-anchor beside hovered rail icon)
+  const [flyoutTop, setFlyoutTop] = useState<number>(12);
+  const [adjustedTop, setAdjustedTop] = useState<number>(12);
+  const flyoutRef = useRef<HTMLDivElement>(null);
+
+  // Dynamic Content-Height & Viewport-Boundary Calculation
+  useLayoutEffect(() => {
+    if (flyoutOpen && flyoutRef.current) {
+      const flyoutHeight = flyoutRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+      const margin = 12;
+
+      let top = flyoutTop - 4; // Align slightly above icon center for visual balance
+
+      // If bottom of flyout would overflow viewport, shift upward
+      if (top + flyoutHeight > windowHeight - margin) {
+        top = windowHeight - margin - flyoutHeight;
+      }
+
+      // Ensure it doesn't overflow above top of screen
+      if (top < margin) {
+        top = margin;
+      }
+
+      setAdjustedTop(top);
+    }
+  }, [flyoutOpen, activeCategoryId, flyoutTop]);
+
   // Hover Handlers with Anti-Flicker Delays
-  const handleCategoryMouseEnter = (categoryId: string) => {
+  const handleCategoryMouseEnter = (categoryId: string, e?: React.MouseEvent) => {
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
       closeTimerRef.current = null;
     }
 
+    const targetTop = e?.currentTarget ? (e.currentTarget as HTMLElement).getBoundingClientRect().top : undefined;
+
     // Small delay to prevent accidental trigger on quick mouse transit
     openTimerRef.current = setTimeout(() => {
       setActiveCategoryId(categoryId);
+      if (targetTop !== undefined) {
+        setFlyoutTop(targetTop);
+      }
       setFlyoutOpen(true);
     }, 120);
   };
@@ -1039,8 +1072,11 @@ export const Sidebar: React.FC = () => {
   };
 
   // Click handler on rail icon (switches category and opens flyout; never pins)
-  const handleCategoryClick = (categoryId: string) => {
+  const handleCategoryClick = (categoryId: string, e?: React.MouseEvent) => {
     setActiveCategoryId(categoryId);
+    if (e?.currentTarget) {
+      setFlyoutTop((e.currentTarget as HTMLElement).getBoundingClientRect().top);
+    }
     setFlyoutOpen(true);
   };
 
@@ -1169,7 +1205,9 @@ export const Sidebar: React.FC = () => {
           <div
             className="w-10 h-10 rounded-xl bg-teal-600 text-white flex items-center justify-center font-bold text-sm shadow-md cursor-pointer hover:scale-105 transition-transform"
             title="eSchool"
-            onClick={() => handleCategoryClick('DASHBOARD')}
+            onClick={(e) => handleCategoryClick('DASHBOARD', e)}
+            onMouseEnter={(e) => handleCategoryMouseEnter('DASHBOARD', e)}
+            onMouseLeave={handleCategoryMouseLeave}
           >
             <GraduationCap className="w-5 h-5" />
           </div>
@@ -1190,8 +1228,8 @@ export const Sidebar: React.FC = () => {
               <div key={cat.id} className="relative group w-full flex justify-center">
                 <button
                   type="button"
-                  onClick={() => handleCategoryClick(cat.id)}
-                  onMouseEnter={() => handleCategoryMouseEnter(cat.id)}
+                  onClick={(e) => handleCategoryClick(cat.id, e)}
+                  onMouseEnter={(e) => handleCategoryMouseEnter(cat.id, e)}
                   onMouseLeave={handleCategoryMouseLeave}
                   className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-all ${
                     isHovered
@@ -1217,15 +1255,17 @@ export const Sidebar: React.FC = () => {
         </div>
       </aside>
 
-      {/* 2. CONTEXTUAL FLOATING FLYOUT LAYER (~250px Overlay beside 68px rail, Completely Opaque) */}
+      {/* 2. CONTEXTUAL FLOATING FLYOUT LAYER (~250px Content-Height Overlay beside 68px rail, Completely Opaque) */}
       {flyoutOpen && (
         <div
-          className="fixed top-0 left-[68px] bottom-0 w-[250px] bg-slate-900 border-r border-slate-800 shadow-2xl z-50 flex flex-col animate-in fade-in slide-in-from-left-2 duration-150"
+          ref={flyoutRef}
+          style={{ top: `${adjustedTop}px` }}
+          className="fixed left-[68px] w-[250px] h-auto max-h-[calc(100vh-24px)] bg-slate-900 border border-slate-800 shadow-2xl rounded-r-xl rounded-l-none z-50 flex flex-col animate-in fade-in slide-in-from-left-2 duration-150 overflow-hidden"
           onMouseEnter={handleNavContainerMouseEnter}
           onMouseLeave={handleNavContainerMouseLeave}
         >
           {/* Flyout Header */}
-          <div className="h-14 px-4 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900">
+          <div className="h-11 px-3.5 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900">
             <div className="flex items-center gap-2 min-w-0">
               <span className="text-teal-400 shrink-0">{activeCategory.icon}</span>
               <div className="min-w-0">
@@ -1248,10 +1288,10 @@ export const Sidebar: React.FC = () => {
             </button>
           </div>
 
-          {/* Flyout Submenu List */}
-          <div className="flex-1 overflow-y-auto p-2 space-y-1 bg-slate-900">
+          {/* Flyout Submenu List (Content-Height, scrolls only if exceeding max-height) */}
+          <div className="overflow-y-auto p-1.5 space-y-0.5 bg-slate-900 min-h-0 scrollbar-thin scrollbar-thumb-slate-700">
             {activeVisibleItems.length === 0 ? (
-              <div className="p-4 text-center text-xs text-slate-500">
+              <div className="p-3 text-center text-xs text-slate-500">
                 No accessible modules under this category.
               </div>
             ) : (
@@ -1261,7 +1301,7 @@ export const Sidebar: React.FC = () => {
                     key={item.key}
                     type="button"
                     onClick={() => handleItemClick(item)}
-                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all group text-slate-300 hover:bg-slate-800 hover:text-white"
+                    className="w-full flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all group text-slate-300 hover:bg-slate-800 hover:text-white"
                   >
                     <span className="shrink-0 text-slate-400 group-hover:text-teal-400 transition-colors">
                       {item.icon}
@@ -1275,9 +1315,9 @@ export const Sidebar: React.FC = () => {
           </div>
 
           {/* Flyout Footer info */}
-          <div className="p-3 border-t border-slate-800 bg-slate-900 flex items-center justify-between text-[11px] text-slate-500">
+          <div className="px-3 py-1.5 border-t border-slate-800 bg-slate-900/90 flex items-center justify-between text-[10px] text-slate-500 shrink-0">
             <span>Hover Flyout</span>
-            <span className="text-[10px] text-slate-500">Esc to close</span>
+            <span className="text-[9px] text-slate-500">Esc to close</span>
           </div>
         </div>
       )}
