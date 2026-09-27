@@ -39,8 +39,18 @@ export function createApp() {
   seedInMemoryDatabase();
 
   // Global Middleware
+  const configuredOrigins = env.CORS_ORIGIN ? env.CORS_ORIGIN.split(',').map((s) => s.trim()) : [];
   app.use(cors({
-    origin: env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (configuredOrigins.includes('*') || configuredOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      if (origin.endsWith('.vercel.app') || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   }));
   app.use(express.json());
