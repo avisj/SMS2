@@ -399,9 +399,6 @@ export class MemoryDatabaseClient implements IDatabaseClient {
 }
 
 let supabaseClient: SupabaseClient | null = null;
-let supabaseHealthy: boolean = false;
-let lastSupabaseCheck: number = 0;
-let healthCheckInProgress: boolean = false;
 
 if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY && !env.SUPABASE_URL.includes('your-project')) {
   supabaseClient = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
@@ -412,39 +409,39 @@ if (env.SUPABASE_URL && env.SUPABASE_SERVICE_ROLE_KEY && !env.SUPABASE_URL.inclu
   });
 }
 
+let supabaseHealthy = Boolean(supabaseClient);
+let lastSupabaseCheck = Date.now();
+let healthCheckInProgress = false;
+
 export const getSupabaseClient = (): SupabaseClient | null => supabaseClient;
 
 export function markSupabaseUnreachable(reason?: string) {
-  if (supabaseHealthy) {
-    console.warn(`[Supabase Circuit Breaker] Marked unreachable (${reason || 'network failure'}). Switching immediately to in-memory engine.`);
-  }
-  supabaseHealthy = false;
+  console.warn(`[Supabase Warning] ${reason || 'network issue'}. Retrying cloud queries.`);
   lastSupabaseCheck = Date.now();
-  if (activeDbClient instanceof SupabaseDatabaseClient) {
-    activeDbClient = null;
-  }
 }
 
 export function markSupabaseHealthy() {
   if (!supabaseHealthy) {
-    console.log('[Supabase Circuit Breaker] Connection verified healthy. Cloud database active.');
+    console.log('[Supabase] Connection verified healthy. Cloud database active.');
   }
   supabaseHealthy = true;
   lastSupabaseCheck = Date.now();
+  if (supabaseClient && !(activeDbClient instanceof PostgresDatabaseClient)) {
+    activeDbClient = new SupabaseDatabaseClient(supabaseClient);
+  }
 }
 
 export function isSupabaseDatabaseActive(): boolean {
   if (process.env.NODE_ENV === 'test') return false;
-  if (!supabaseClient) return false;
-  return supabaseHealthy;
+  return Boolean(supabaseClient);
 }
 
 export async function probeSupabaseHealth(): Promise<boolean> {
-  if (!supabaseClient || healthCheckInProgress) return supabaseHealthy;
+  if (!supabaseClient || healthCheckInProgress) return Boolean(supabaseClient);
   healthCheckInProgress = true;
   try {
     const timeoutPromise = new Promise<any>((_, reject) =>
-      setTimeout(() => reject(new Error('Supabase probe timed out after 2000ms')), 2000)
+      setTimeout(() => reject(new Error('Supabase probe timed out after 15000ms')), 15000)
     );
     const queryPromise = supabaseClient.from('schools').select('id').limit(1);
     const res: any = await Promise.race([queryPromise, timeoutPromise]);
@@ -473,7 +470,7 @@ export class SupabaseDatabaseClient implements ICloudDatabaseClient {
   async testConnection(): Promise<{ ok: boolean; message?: string; error?: string }> {
     try {
       const timeoutPromise = new Promise<any>((_, reject) =>
-        setTimeout(() => reject(new Error('Connection timed out after 2000ms')), 2000)
+        setTimeout(() => reject(new Error('Connection timed out after 15000ms')), 15000)
       );
       const queryPromise = this.client.from('schools').select('id, school_code').limit(1);
       const res: any = await Promise.race([queryPromise, timeoutPromise]);
@@ -858,25 +855,24 @@ export function getCloudDatabaseClient(): ICloudDatabaseClient | null {
 }
 
 export function getDatabaseClient(): IDatabaseClient {
-  if (!activeDbClient) {
-    if (isPostgresDatabaseActive()) {
+  if (isPostgresDatabaseActive()) {
+    if (!(activeDbClient instanceof PostgresDatabaseClient)) {
       activeDbClient = new PostgresDatabaseClient(env.DATABASE_URL);
-    } else if (isSupabaseDatabaseActive() && supabaseClient) {
-      activeDbClient = new SupabaseDatabaseClient(supabaseClient);
-    } else {
-      activeMemoryClient = getMemoryDbClient();
-      activeDbClient = activeMemoryClient;
     }
+    return activeDbClient;
   }
-  return activeDbClient;
+  if (supabaseClient) {
+    if (!(activeDbClient instanceof SupabaseDatabaseClient)) {
+      activeDbClient = new SupabaseDatabaseClient(supabaseClient);
+    }
+    return activeDbClient;
+  }
+  return getMemoryDbClient();
 }
 
 export function getMemoryDbClient(): MemoryDatabaseClient {
   if (!activeMemoryClient) {
     activeMemoryClient = new MemoryDatabaseClient();
-    if (!isDatabaseConfigured() && !isSupabaseDatabaseActive()) {
-      activeDbClient = activeMemoryClient;
-    }
   }
   return activeMemoryClient;
 }
