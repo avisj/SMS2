@@ -2,7 +2,8 @@
 // API Client (Typed HTTP Client with Security Headers)
 // ========================================================================
 
-const API_BASE_URL = '/api/v1';
+const rawApiUrl = (import.meta as any).env?.VITE_API_URL?.trim();
+const API_BASE_URL = rawApiUrl ? `${rawApiUrl.replace(/\/$/, '')}/api/v1` : '/api/v1';
 
 let authToken: string | null = localStorage.getItem('sms_auth_token');
 let activeBranchId: string | null = localStorage.getItem('sms_active_branch_id');
